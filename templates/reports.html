@@ -1,0 +1,957 @@
+
+{% extends "base.html" %}
+
+{% block title %}Reports & Analytics | ExpenseTracker Pro{% endblock %}
+
+{% block content %}
+
+<style>
+.report-page {
+    padding: 12px 0 40px;
+    color: #edf0ff;
+}
+
+.report-page * {
+    box-sizing: border-box;
+}
+
+.report-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+}
+
+.report-header h1 {
+    margin: 0;
+    font-size: clamp(26px, 4vw, 36px);
+    color: #f8fafc;
+}
+
+.report-header p {
+    margin: 8px 0 0;
+    color: #9da8c7;
+    font-size: 14px;
+}
+
+.report-back {
+    text-decoration: none;
+    color: #67e8f9;
+    background: #10182a;
+    border: 1px solid #303b59;
+    padding: 11px 16px;
+    border-radius: 12px;
+}
+
+.muted {
+    color: #9da8c7;
+    font-size: 13px;
+}
+
+.report-page h2 {
+    color: #f8fafc;
+    font-size: 19px;
+    margin: 0 0 8px;
+}
+
+/* ANALYTICS OVERVIEW */
+
+.analytics-overview {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 22px;
+}
+
+.analytics-stat {
+    min-width: 0;
+    padding: 22px;
+    border: 1px solid rgba(151, 164, 210, .17);
+    border-radius: 18px;
+    background: linear-gradient(145deg, #191b3a, #101629);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, .12);
+}
+
+.analytics-stat span {
+    display: block;
+    color: #a6b1d0;
+    font-size: 13px;
+    margin-bottom: 13px;
+}
+
+.analytics-stat strong {
+    display: block;
+    font-size: clamp(19px, 2vw, 27px);
+    color: #b7a5ff;
+    overflow-wrap: anywhere;
+}
+
+.analytics-stat:nth-child(2) strong {
+    color: #67e8f9;
+}
+
+.analytics-stat:nth-child(3) strong {
+    color: #6ee7b7;
+}
+
+.analytics-stat:nth-child(4) strong {
+    color: #fbbf76;
+}
+
+/* GENERAL CARDS */
+
+.report-card {
+    min-width: 0;
+    padding: 24px;
+    border: 1px solid #343b4d;
+    border-radius: 20px;
+    background: linear-gradient(145deg, #171e30, #111827);
+    margin-bottom: 22px;
+}
+
+.analytics-charts {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 20px;
+}
+
+.chart-area {
+    height: 285px;
+    position: relative;
+    margin-top: 20px;
+}
+
+/* MONTH FILTER */
+
+.report-filter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 18px;
+    padding: 22px 24px;
+    background: #171e30;
+    border: 1px solid #343b4d;
+    border-radius: 20px;
+    margin-bottom: 22px;
+}
+
+.filter-title h3 {
+    margin: 0;
+    font-size: 16px;
+    color: #f8fafc;
+}
+
+.filter-title p {
+    color: #9da8c7;
+    font-size: 13px;
+    margin: 6px 0 0;
+}
+
+.month-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.month-form input {
+    min-height: 43px;
+    padding: 10px 13px;
+    background: #0b1020;
+    color: #f8fafc;
+    border: 1px solid #3b4356;
+    border-radius: 11px;
+    font: inherit;
+}
+
+.month-btn {
+    min-height: 43px;
+    padding: 10px 17px;
+    background: linear-gradient(120deg, #8b5cf6, #6366f1);
+    color: white;
+    border: 0;
+    border-radius: 11px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.month-btn:hover {
+    filter: brightness(1.12);
+}
+
+/* SELECTED MONTH STATS */
+
+.report-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 22px;
+}
+
+.report-stat-card {
+    min-width: 0;
+    padding: 22px;
+    border-radius: 18px;
+    border: 1px solid #343b4d;
+    background: #171e30;
+}
+
+.report-stat-card span {
+    display: block;
+    color: #9da8c7;
+    font-size: 13px;
+    margin-bottom: 12px;
+}
+
+.report-stat-card strong {
+    color: #f8fafc;
+    font-size: clamp(21px, 2.5vw, 28px);
+    overflow-wrap: anywhere;
+}
+
+/* BUDGET SUMMARY */
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 15px;
+}
+
+.summary-item {
+    padding: 18px;
+    border-radius: 14px;
+    background: #0f1728;
+    min-width: 0;
+}
+
+.summary-item span {
+    display: block;
+    color: #9da8c7;
+    font-size: 12px;
+    margin-bottom: 9px;
+}
+
+.summary-item strong {
+    display: block;
+    color: #f8fafc;
+    font-size: clamp(18px, 2vw, 23px);
+    overflow-wrap: anywhere;
+}
+
+.green-text {
+    color: #6ee7b7 !important;
+}
+
+.red-text {
+    color: #fb7185 !important;
+}
+
+.burn-wrapper {
+    margin-top: 22px;
+}
+
+.burn-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    color: #cbd5e1;
+    font-size: 13px;
+    margin-bottom: 9px;
+}
+
+.progress-track {
+    width: 100%;
+    height: 10px;
+    background: #0b1020;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #8b5cf6, #06b6d4);
+    border-radius: 20px;
+}
+
+/* CATEGORY SPENDING */
+
+.category-row {
+    margin-bottom: 19px;
+}
+
+.category-row:last-child {
+    margin-bottom: 0;
+}
+
+.category-info {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.category-info span:first-child {
+    color: #e2e8f0;
+    font-size: 14px;
+}
+
+.category-info span:last-child {
+    color: #cbd5e1;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.category-track {
+    height: 9px;
+    background: #0b1020;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.category-fill {
+    height: 100%;
+    min-width: 0;
+    background: linear-gradient(90deg, #8b5cf6, #22d3ee);
+    border-radius: 20px;
+}
+
+/* MONTHLY HISTORY */
+
+.history-wrap,
+.recent-wrap {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.history-table,
+.recent-table {
+    width: 100%;
+    min-width: 620px;
+    border-collapse: collapse;
+    margin-top: 16px;
+}
+
+.history-table th,
+.recent-table th {
+    color: #9da8c7;
+    font-size: 12px;
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: .4px;
+}
+
+.history-table th,
+.history-table td,
+.recent-table th,
+.recent-table td {
+    padding: 14px 12px;
+    border-bottom: 1px solid #303748;
+}
+
+.history-table td,
+.recent-table td {
+    color: #e2e8f0;
+    font-size: 13px;
+}
+
+.history-table tr:last-child td,
+.recent-table tr:last-child td {
+    border-bottom: 0;
+}
+
+.table-burn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.table-progress {
+    width: 65px;
+    height: 7px;
+    background: #0b1020;
+    border-radius: 20px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.table-progress-fill {
+    height: 100%;
+    background: #34d399;
+    border-radius: 20px;
+}
+
+.view-report-btn {
+    display: inline-block;
+    padding: 7px 11px;
+    border-radius: 8px;
+    border: 1px solid #444c60;
+    color: #67e8f9;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.view-report-btn:hover {
+    background: #252b3a;
+}
+
+.expense-amount {
+    color: #6ee7b7 !important;
+    font-weight: 700;
+}
+
+.empty-report {
+    padding: 30px 12px;
+    text-align: center;
+    color: #9da8c7;
+}
+
+.empty-report h3 {
+    color: #e2e8f0;
+    margin-bottom: 7px;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 950px) {
+    .analytics-overview {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .analytics-charts {
+        grid-template-columns: 1fr;
+    }
+
+    .report-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 650px) {
+    .report-filter {
+        align-items: stretch;
+        flex-direction: column;
+        padding: 18px;
+    }
+
+    .month-form {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .month-form input {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .month-btn {
+        flex: 1;
+    }
+
+    .summary-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .report-card {
+        padding: 18px;
+    }
+}
+
+@media (max-width: 430px) {
+    .analytics-overview {
+        gap: 10px;
+    }
+
+    .analytics-stat {
+        padding: 15px;
+    }
+
+    .report-stats {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+<section class="insights-panel">
+    <h2>✨ Smart Expense Insights</h2>
+
+    {% for insight in expense_insights %}
+        <div class="insight-item">
+            {{ insight }}
+        </div>
+    {% endfor %}
+</section>
+
+</style>
+
+<div class="report-page">
+
+    <!-- HEADER -->
+    <header class="report-header">
+        <div>
+            <h1>Reports <span style="color:#a78bfa">& Analytics</span></h1>
+            <p>Understand your spending and make smarter financial decisions.</p>
+        </div>
+
+        <a class="report-back" href="/dashboard">← Dashboard</a>
+    </header>
+
+    <!-- ALL-TIME ANALYTICS -->
+    <section class="analytics-overview">
+
+        <div class="analytics-stat">
+            <span>All-Time Spending</span>
+            <strong>₹{{ "%.2f"|format(total_spending) }}</strong>
+        </div>
+
+        <div class="analytics-stat">
+            <span>This Month</span>
+            <strong>₹{{ "%.2f"|format(month_spending) }}</strong>
+        </div>
+
+        <div class="analytics-stat">
+            <span>Recorded Expenses</span>
+            <strong>{{ expense_count }}</strong>
+        </div>
+
+        <div class="analytics-stat">
+            <span>Top Spending Category</span>
+            <strong>{{ top_category }}</strong>
+        </div>
+
+    </section>
+
+    <!-- CHARTS -->
+    <section class="analytics-charts">
+
+        <div class="report-card">
+            <h2>Monthly Spending Trend</h2>
+            <p class="muted">Spending over the last six months</p>
+
+            <div class="chart-area">
+                <canvas id="combinedMonthlyChart"></canvas>
+            </div>
+        </div>
+
+        <div class="report-card">
+            <h2>Category Breakdown</h2>
+            <p class="muted">Distribution across all recorded expenses</p>
+
+            <div class="chart-area">
+                <canvas id="combinedCategoryChart"></canvas>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- MONTH SELECTOR -->
+    <section class="report-filter">
+
+        <div class="filter-title">
+            <h3>Monthly Report</h3>
+            <p>Select a month to view its spending details.</p>
+        </div>
+
+        <form method="GET" action="{{ url_for('reports') }}" class="month-form">
+            <input
+                type="month"
+                name="month"
+                value="{{ selected_month }}"
+                required
+            >
+            <button type="submit" class="month-btn">View Report</button>
+        </form>
+
+    </section>
+
+    <!-- SELECTED MONTH STATS -->
+    <section class="report-stats">
+
+        <div class="report-stat-card">
+            <span>Total for Selected Month</span>
+            <strong>₹{{ "%.2f"|format(total) }}</strong>
+        </div>
+
+        <div class="report-stat-card">
+            <span>Daily Average</span>
+            <strong>₹{{ "%.2f"|format(daily_average) }}</strong>
+        </div>
+
+        <div class="report-stat-card">
+            <span>Largest Expense</span>
+            <strong>₹{{ "%.2f"|format(largest_expense) }}</strong>
+        </div>
+
+    </section>
+
+    <!-- BUDGET SUMMARY -->
+    <section class="report-card">
+
+        <h2>Budget Summary</h2>
+        <p class="muted" style="margin-bottom:20px">
+            Budget compared with spending for the selected month
+        </p>
+
+        <div class="summary-grid">
+
+            <div class="summary-item">
+                <span>Total Budget</span>
+                <strong>₹{{ "%.2f"|format(budget) }}</strong>
+            </div>
+
+            <div class="summary-item">
+                <span>Total Spent</span>
+                <strong>₹{{ "%.2f"|format(total) }}</strong>
+            </div>
+
+            <div class="summary-item">
+                <span>Remaining Budget</span>
+                <strong class="{% if remaining_budget < 0 %}red-text{% else %}green-text{% endif %}">
+                    ₹{{ "%.2f"|format(remaining_budget) }}
+                </strong>
+            </div>
+
+        </div>
+
+        <div class="burn-wrapper">
+            <div class="burn-header">
+                <span>Budget Usage</span>
+                <span>{{ "%.1f"|format(burn_rate) }}%</span>
+            </div>
+
+            <div class="progress-track">
+                <div
+                    class="progress-bar"
+                    style="width: {{ burn_rate }}%;"
+                ></div>
+            </div>
+        </div>
+
+        {% if budget <= 0 %}
+        <p class="muted" style="margin-top:12px">
+            Set a budget on the Budget page to track your budget usage.
+        </p>
+        {% elif total > budget %}
+        <p style="color:#fb7185;margin-top:12px">
+            You have exceeded your budget for this month.
+        </p>
+        {% endif %}
+
+    </section>
+
+    <!-- SELECTED MONTH CATEGORY SPENDING -->
+    <section class="report-card">
+
+        <h2>Category Spending</h2>
+        <p class="muted" style="margin-bottom:22px">
+            Breakdown for {{ selected_month }}
+        </p>
+
+        {% if category_data %}
+
+            {% for item in category_data %}
+
+            <div class="category-row">
+
+                <div class="category-info">
+                    <span>{{ item.category }}</span>
+                    <span>₹{{ "%.2f"|format(item.amount) }}</span>
+                </div>
+
+                <div class="category-track">
+                    <div
+                        class="category-fill"
+                        style="width: {{ ((item.amount / max_category_amount * 100) if max_category_amount > 0 else 0)|round(1) }}%;"
+                    ></div>
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="empty-report">
+                <h3>No spending data</h3>
+                <p>No expenses were found for this selected month.</p>
+            </div>
+
+        {% endif %}
+
+    </section>
+
+    <!-- MONTHLY HISTORY -->
+    <section class="report-card">
+
+        <h2>Month-wise Spending History</h2>
+        <p class="muted">Compare your spending and budget across previous months.</p>
+
+        {% if monthly_history %}
+
+        <div class="history-wrap">
+            <table class="history-table">
+
+                <thead>
+                    <tr>
+                        <th>Month</th>
+                        <th>Budget</th>
+                        <th>Spent</th>
+                        <th>Remaining</th>
+                        <th>Usage</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for item in monthly_history %}
+
+                    <tr>
+                        <td><strong>{{ item.label }}</strong></td>
+
+                        <td>₹{{ "%.2f"|format(item.budget) }}</td>
+
+                        <td>₹{{ "%.2f"|format(item.spent) }}</td>
+
+                        <td class="{% if item.remaining < 0 %}red-text{% else %}green-text{% endif %}">
+                            ₹{{ "%.2f"|format(item.remaining) }}
+                        </td>
+
+                        <td>
+                            <div class="table-burn">
+                                <div class="table-progress">
+                                    <div
+                                        class="table-progress-fill"
+                                        style="width: {{ item.percentage }}%;"
+                                    ></div>
+                                </div>
+                                <span>{{ "%.0f"|format(item.percentage) }}%</span>
+                            </div>
+                        </td>
+
+                        <td>
+                            <a
+                                href="{{ url_for('reports', month=item.key) }}"
+                                class="view-report-btn"
+                            >
+                                View
+                            </a>
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+
+        {% else %}
+
+        <div class="empty-report">
+            <h3>No monthly history yet</h3>
+            <p>Your monthly spending history will appear here once expenses are recorded.</p>
+        </div>
+
+        {% endif %}
+
+    </section>
+
+    <!-- RECENT TRANSACTIONS -->
+    <section class="report-card">
+
+        <h2>Recent Transactions</h2>
+        <p class="muted">Your latest recorded expenses</p>
+
+        {% if recent_expenses %}
+
+        <div class="recent-wrap">
+            <table class="recent-table">
+
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for item in recent_expenses %}
+
+                    <tr>
+                        <td>{{ item.date }}</td>
+                        <td>{{ item.description or "—" }}</td>
+                        <td>{{ item.category }}</td>
+                        <td class="expense-amount">
+                            ₹{{ "%.2f"|format(item.amount) }}
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+
+        {% else %}
+
+        <div class="empty-report">
+            <h3>No expenses yet</h3>
+            <p>Add an expense to start seeing your analytics.</p>
+            <a href="/add-expense" class="view-report-btn">Add Expense</a>
+        </div>
+
+        {% endif %}
+
+    </section>
+
+</div>
+
+
+<section class="insights-panel">
+    <h2>✨ Smart Expense Insights</h2>
+
+    {% for insight in expense_insights %}
+        <div class="insight-item">
+            {{ insight }}
+        </div>
+    {% endfor %}
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const monthLabels = {{ month_labels | tojson }};
+    const monthValues = {{ month_values | tojson }};
+    const categoryLabels = {{ category_labels | tojson }};
+    const categoryValues = {{ category_values | tojson }};
+
+    if (typeof Chart === "undefined") {
+        console.error("Chart.js could not be loaded.");
+        return;
+    }
+
+    Chart.defaults.color = "#a6b1d0";
+    Chart.defaults.font.family = "Inter, Arial, sans-serif";
+
+    const monthlyCanvas = document.getElementById("combinedMonthlyChart");
+
+    if (monthlyCanvas) {
+        new Chart(monthlyCanvas, {
+            type: "line",
+            data: {
+                labels: monthLabels,
+                datasets: [{
+                    label: "Spending (₹)",
+                    data: monthValues,
+                    borderColor: "#a78bfa",
+                    backgroundColor: "rgba(167,139,250,0.15)",
+                    fill: true,
+                    tension: 0.38,
+                    borderWidth: 3,
+                    pointRadius: 4,
+                    pointHoverRadius: 7
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    intersect: false,
+                    mode: "index"
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return " ₹" +
+                                    Number(context.parsed.y).toLocaleString("en-IN", {
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2
+                                    });
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: "#303748"
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    const categoryCanvas = document.getElementById("combinedCategoryChart");
+
+    if (categoryCanvas) {
+        new Chart(categoryCanvas, {
+            type: "doughnut",
+            data: {
+                labels: categoryLabels,
+                datasets: [{
+                    data: categoryValues,
+                    backgroundColor: [
+                        "#a78bfa",
+                        "#22d3ee",
+                        "#34d399",
+                        "#fbbf24",
+                        "#fb7185",
+                        "#60a5fa",
+                        "#c084fc",
+                        "#2dd4bf",
+                        "#f97316",
+                        "#818cf8"
+                    ],
+                    borderColor: "#171e30",
+                    borderWidth: 3,
+                    hoverOffset: 9
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: "65%",
+                plugins: {
+                    legend: {
+                        position: "bottom",
+                        labels: {
+                            padding: 14,
+                            usePointStyle: true
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const value = Number(context.raw || 0);
+                                return " " + context.label + ": ₹" +
+                                    value.toLocaleString("en-IN", {
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2
+                                    });
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+});
+</script>
+
+{% endblock %}

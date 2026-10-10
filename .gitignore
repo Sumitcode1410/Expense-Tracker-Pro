@@ -1,0 +1,6 @@
+__pycache__/
+*.py[cod]
+expenses.db
+.env
+.venv/
+venv/
