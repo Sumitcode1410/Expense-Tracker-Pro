@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Sign In - ExpenseTracker Pro</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        min-height: 100vh;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-family: Arial, sans-serif;
+
+        background: #070b17;
+        color: white;
+
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* Background glow */
+
+      body::before {
+        content: "";
+
+        position: absolute;
+
+        width: 420px;
+        height: 420px;
+
+        background: rgba(139, 92, 246, 0.18);
+
+        border-radius: 50%;
+
+        filter: blur(100px);
+
+        top: -120px;
+        left: -120px;
+      }
+
+      body::after {
+        content: "";
+
+        position: absolute;
+
+        width: 380px;
+        height: 380px;
+
+        background: rgba(6, 182, 212, 0.13);
+
+        border-radius: 50%;
+
+        filter: blur(100px);
+
+        right: -120px;
+        bottom: -120px;
+      }
+
+      /* Login card */
+
+      .login-card {
+        width: 400px;
+        max-width: 90%;
+
+        padding: 35px;
+
+        background: rgba(17, 24, 39, 0.88);
+
+        border: 1px solid rgba(255, 255, 255, 0.09);
+
+        border-radius: 18px;
+
+        backdrop-filter: blur(15px);
+
+        box-shadow: 0 25px 70px rgba(0, 0, 0, 0.45);
+
+        position: relative;
+
+        z-index: 2;
+      }
+
+      /* Logo */
+
+      .logo {
+        text-align: center;
+
+        margin-bottom: 25px;
+      }
+
+      .logo-icon {
+        width: 48px;
+        height: 48px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        margin: 0 auto 12px;
+
+        border-radius: 13px;
+
+        background: linear-gradient(135deg, #8b5cf6, #06b6d4);
+
+        font-size: 24px;
+        font-weight: bold;
+      }
+
+      .logo h1 {
+        font-size: 22px;
+      }
+
+      .pro {
+        color: #67e8f9;
+
+        font-size: 10px;
+
+        padding: 3px 6px;
+
+        border-radius: 5px;
+
+        background: rgba(6, 182, 212, 0.12);
+
+        border: 1px solid rgba(6, 182, 212, 0.25);
+      }
+
+      .subtitle {
+        text-align: center;
+
+        color: #64748b;
+
+        font-size: 13px;
+
+        margin-bottom: 28px;
+      }
+
+      /* Form */
+
+      .form-group {
+        margin-bottom: 18px;
+      }
+
+      label {
+        display: block;
+
+        margin-bottom: 7px;
+
+        color: #cbd5e1;
+
+        font-size: 13px;
+
+        font-weight: 600;
+      }
+
+      input {
+        width: 100%;
+
+        padding: 13px 14px;
+
+        border-radius: 9px;
+
+        border: 1px solid rgba(255, 255, 255, 0.1);
+
+        background: #0b1220;
+
+        color: white;
+
+        outline: none;
+
+        font-size: 14px;
+
+        transition: 0.25s;
+      }
+
+      input:focus {
+        border-color: #8b5cf6;
+
+        box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+      }
+
+      input::placeholder {
+        color: #475569;
+      }
+
+      /* Remember / forgot */
+
+      .options {
+        display: flex;
+
+        justify-content: space-between;
+
+        align-items: center;
+
+        margin: 5px 0 22px;
+
+        font-size: 12px;
+      }
+
+      .remember {
+        display: flex;
+
+        align-items: center;
+
+        gap: 7px;
+
+        color: #64748b;
+      }
+
+      .remember input {
+        width: auto;
+      }
+
+      .forgot {
+        color: #a78bfa;
+        text-decoration: none;
+      }
+
+      /* Button */
+
+      .signin-btn {
+        width: 100%;
+
+        padding: 13px;
+
+        border: none;
+
+        border-radius: 9px;
+
+        color: white;
+
+        font-size: 14px;
+
+        font-weight: bold;
+
+        cursor: pointer;
+
+        background: linear-gradient(135deg, #8b5cf6, #06b6d4);
+
+        transition: 0.25s;
+      }
+
+      .signin-btn:hover {
+        transform: translateY(-2px);
+
+        box-shadow: 0 12px 30px rgba(139, 92, 246, 0.25);
+      }
+
+      /* Bottom */
+
+      .bottom-text {
+        text-align: center;
+
+        color: #64748b;
+
+        font-size: 12px;
+
+        margin-top: 22px;
+      }
+
+      .bottom-text a {
+        color: #a78bfa;
+
+        text-decoration: none;
+      }
+
+      .back-home {
+        display: block;
+
+        text-align: center;
+
+        margin-top: 20px;
+
+        color: #64748b;
+
+        font-size: 12px;
+
+        text-decoration: none;
+      }
+
+      .back-home:hover {
+        color: white;
+      }
+
+      .error-message {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.35);
+        color: #fca5a5;
+        padding: 10px 12px;
+        border-radius: 8px;
+        font-size: 13px;
+        text-align: center;
+        margin-bottom: 18px;
+      }
+
+      input[type="password"]::-ms-reveal,
+      input[type="password"]::-ms-clear {
+        display: none;
+      }
+
+      .password-box {
+        position: relative;
+      }
+
+      .password-box input {
+        width: 100%;
+        border-sizing: border-box;
+        padding-right: 45px;
+      }
+
+      .show-password {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+
+        background: transparent;
+        border: none;
+        color: #aaa;
+        cursor: pointer;
+        font-size: 18px;
+      }
+
+      .show-password:hover {
+        color: white;
+      }
+
+      .error-message {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.35);
+        color: #fca5a5;
+
+        padding: 10px 12px;
+        border-radius: 8px;
+
+        font-size: 13px;
+        text-align: center;
+
+        margin-bottom: 15px;
+      }
+      input:-webkit-autofill,
+      input:-webkit-autofill:hover,
+      input:-webkit-autofill:focus {
+        -webkit-text-fill-color: #ffffff;
+        -webkit-box-shadow: 0 0 0px 1000px #171d32 inset;
+        box-shadow: 0 0 0px 1000px #171d32 inset;
+        transition: background-color 5000s ease-in-out 0s;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="login-card">
+      <div class="logo">
+        <div class="logo-icon">₹</div>
+
+        <h1>
+          ExpenseTracker
+          <span class="pro">PRO</span>
+        </h1>
+      </div>
+
+      <p class="subtitle">Sign in to manage your expenses</p>
+
+      <form action="/signin" method="POST">
+        <div class="form-group">
+          <label for="email"> Email Address </label>
+
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Enter your email"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <div class="password-box">
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Enter your password"
+              required
+            />
+
+            <button
+              type="button"
+              class="show-password"
+              onclick="
+                const p = document.getElementById('password');
+                if (p.type === 'password') {
+                  p.type = 'text';
+                  this.textContent = '👁️';
+                } else {
+                  p.type = 'password';
+                  this.textContent = '👁';
+                }
+              "
+            >
+              👁
+            </button>
+          </div>
+        </div>
+
+        <div class="options">
+          <label class="remember">
+            <input type="checkbox" />
+
+            Remember me
+          </label>
+
+          <a href="/reset-password" class="forgot"> Forgot password? </a>
+        </div>
+
+        {% if error %}
+        <div class="error-message">{{ error }}</div>
+        {% endif %}
+
+        <button type="submit" class="signin-btn">Sign In</button>
+      </form>
+
+      <p class="bottom-text">
+        Don't have an account?
+        <a href="/signup"> Create Account </a>
+      </p>
+
+      <a href="/" class="back-home"> ← Back to Home </a>
+    </div>
+  </body>
+</html>

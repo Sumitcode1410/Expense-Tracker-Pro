@@ -1,0 +1,568 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}ExpenseTracker Pro{% endblock %}</title>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #050816;
+      --muted: #94a3b8;
+      --purple: #8b5cf6;
+      --cyan: #22d3ee;
+      --border: rgba(148,163,184,.16);
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: "Segoe UI", Arial, sans-serif;
+      color: #f8fafc;
+      background:
+        radial-gradient(circle at 15% 10%, rgba(139,92,246,.16), transparent 32%),
+        radial-gradient(circle at 90% 20%, rgba(6,182,212,.12), transparent 30%),
+        var(--bg);
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+
+    .sidebar {
+      width: 258px;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      position: fixed;
+      inset: 0 auto 0 0;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      padding: 26px 15px 16px;
+      overflow-y: auto;
+      background: linear-gradient(180deg, #080d22, #0a1030 60%, #0b1236);
+      border-right: 1px solid rgba(99,102,241,.22);
+      transition: transform .25s ease, width .25s ease;
+    }
+
+    .sidebar::before {
+      content: "";
+      position: absolute;
+      inset: auto 0 0;
+      height: 300px;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse 120% 70% at 10% 105%, rgba(37,99,235,.45), transparent 62%),
+        radial-gradient(ellipse 90% 60% at 100% 85%, rgba(147,51,234,.32), transparent 60%);
+    }
+
+    .sidebar > * { position: relative; z-index: 1; }
+
+    
+.sidebar-close {
+    position: absolute;
+    top: 16px;
+    right: 14px;
+    z-index: 10;
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    color: white;
+    cursor: pointer;
+    background: #0b1230;
+    border: 2px solid #6d5cff;
+    border-radius: 50%;
+    box-shadow: 0 0 12px rgba(109,92,255,.4);
+    transition: .2s ease;
+}
++++++++++++
+
+    .sidebar-close:hover {
+      background: linear-gradient(135deg, #0891b2, #7c3aed);
+      transform: scale(1.05);
+    }
+
+    .sidebar-close svg { width: 22px; height: 22px; }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      padding: 22px 9px 26px;
+      text-align: center;
+    }
+
+    .brand-icon {
+      width: 66px;
+      height: 66px;
+      display: grid;
+      place-items: center;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #06b6d4, #4f46e5, #9333ea);
+      box-shadow: 0 0 28px rgba(99,102,241,.4);
+      font-size: 34px;
+      font-weight: 800;
+    }
+
+    .brand-name { font-size: 20px; font-weight: 800; line-height: 1.15; }
+    .brand-name span { display: block; margin-top: 4px; color: var(--cyan); font-size: 15px; letter-spacing: 3px; }
+
+    .menu-heading {
+      padding: 0 12px;
+      margin: 0 0 12px;
+      color: #7d8bb0;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+    }
+
+    .nav-links { display: grid; gap: 8px; }
+
+    .nav-link {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-height: 54px;
+      padding: 8px 10px;
+      color: #dbe4f5;
+      font-size: 14px;
+      font-weight: 600;
+      border: 1px solid transparent;
+      border-radius: 14px;
+      transition: .2s ease;
+    }
+
+    .nav-icon {
+      width: 40px;
+      height: 40px;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      color: white;
+      box-shadow: 0 6px 14px rgba(0,0,0,.25);
+    }
+
+    .nav-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .ic-dashboard { background: linear-gradient(135deg, #7c5cff, #a855f7); }
+    .ic-add { background: linear-gradient(135deg, #06b6d4, #2563eb); }
+    .ic-expenses { background: linear-gradient(135deg, #d946ef, #9333ea); }
+    .ic-budget { background: linear-gradient(135deg, #22c55e, #0f766e); }
+    .ic-reports { background: linear-gradient(135deg, #38bdf8, #2563eb); }
+
+    .nav-link:hover {
+      color: white;
+      background: rgba(139,92,246,.12);
+      transform: translateX(2px);
+    }
+
+    .nav-link.active {
+      color: white;
+      background: linear-gradient(100deg, #5b3df5, #7c3aed 60%, #9333ea);
+      border-color: rgba(167,139,250,.35);
+      box-shadow: 0 8px 22px rgba(109,76,255,.3);
+    }
+
+    .nav-link.active::before {
+      content: "";
+      position: absolute;
+      left: -15px;
+      top: 8px;
+      bottom: 8px;
+      width: 4px;
+      border-radius: 0 4px 4px 0;
+      background: var(--cyan);
+      box-shadow: 0 0 10px var(--cyan);
+    }
+
+    .sidebar-spacer { flex: 1; min-height: 25px; }
+
+    .sidebar-bottom {
+      padding-top: 14px;
+      border-top: 1px solid rgba(148,163,184,.25);
+    }
+
+    /* Logout styled to match the sidebar */
+    .logout {
+      color: #ffe4e6;
+      background: linear-gradient(100deg, rgba(244,63,94,.10), rgba(139,92,246,.08));
+      border-color: rgba(251,113,133,.12);
+    }
+
+    .logout .nav-icon {
+      background: linear-gradient(135deg, #fb7185, #be123c);
+    }
+
+    .logout:hover {
+      color: white;
+      background: linear-gradient(100deg, rgba(244,63,94,.22), rgba(139,92,246,.14));
+      border-color: rgba(251,113,133,.3);
+    }
+
+    /* User name at bottom */
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      margin-top: 13px;
+      padding: 12px 10px;
+      border: 1px solid rgba(139,92,246,.3);
+      border-radius: 14px;
+      background: linear-gradient(120deg, rgba(34,211,238,.08), rgba(139,92,246,.18));
+      min-width: 0;
+    }
+
+    .user-avatar {
+      width: 39px;
+      height: 39px;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      border-radius: 13px;
+      color: white;
+      font-size: 16px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #06b6d4, #7c3aed);
+    }
+
+    .user-name {
+      color: white;
+      font-size: 13px;
+      font-weight: 700;
+      overflow-wrap: anywhere;
+    }
+
+    .user-info { min-width: 0; }
+
+    .main-content {
+      min-height: 100vh;
+      min-width: 0;
+      margin-left: 258px;
+      transition: margin-left .25s ease;
+    }
+
+    .topbar {
+      height: 70px;
+      position: sticky;
+      top: 0;
+      z-index: 500;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 0 25px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(5,8,22,.85);
+      backdrop-filter: blur(16px);
+    }
+
+    .topbar-left { display: flex; align-items: center; gap: 12px; }
+    .topbar-title { font-size: 20px; font-weight: 750; }
+    .topbar-subtitle { margin-top: 3px; color: var(--muted); font-size: 13px; }
+
+    .sidebar-toggle {
+      display: none;
+      width: 42px;
+      height: 42px;
+      flex-shrink: 0;
+      place-items: center;
+      color: white;
+      background: rgba(139,92,246,.13);
+      border: 1px solid rgba(139,92,246,.35);
+      border-radius: 12px;
+      cursor: pointer;
+    }
+
+    .sidebar-toggle svg { width: 22px; height: 22px; }
+
+    .topbar-status { display: flex; align-items: center; gap: 8px; color: #a8b5cc; font-size: 11px; }
+    .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #34d399; box-shadow: 0 0 9px #34d399; }
+
+    .container { width: 100%; max-width: 1500px; margin: auto; padding: 28px; }
+
+    .card {
+      padding: 23px;
+      margin-bottom: 20px;
+      border: 1px solid var(--border);
+      border-radius: 17px;
+      background: linear-gradient(145deg, rgba(20,29,56,.8), rgba(9,14,30,.8));
+      box-shadow: 0 15px 40px rgba(0,0,0,.18);
+    }
+
+    h1 { font-size: clamp(25px, 3vw, 34px); color: #f8fafc; }
+    h2 { color: #f8fafc; }
+    h3 { color: #e2e8f0; }
+
+    input, select, textarea {
+      max-width: 100%;
+      color: white;
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+    }
+
+    input:focus, select:focus, textarea:focus { outline: 2px solid rgba(139,92,246,.5); }
+    table { width: 100%; color: #e2e8f0; border-collapse: collapse; }
+    th { color: #c4b5fd; }
+    td, th { padding: 10px; border-bottom: 1px solid var(--border); }
+
+    .mobile-overlay { display: none; }
+
+    body.sidebar-collapsed .sidebar { width: 78px; padding-inline: 10px; }
+    body.sidebar-collapsed .main-content { margin-left: 78px; }
+    body.sidebar-collapsed .brand-name,
+    body.sidebar-collapsed .menu-heading,
+    body.sidebar-collapsed .nav-text,
+    body.sidebar-collapsed .user-name { display: none; }
+    body.sidebar-collapsed .brand-icon { width: 48px; height: 48px; font-size: 26px; }
+    body.sidebar-collapsed .brand { padding-inline: 0; }
+    body.sidebar-collapsed .nav-link { justify-content: center; padding-inline: 5px; }
+    body.sidebar-collapsed .user-profile { justify-content: center; padding-inline: 4px; }
+
+    @media (max-width: 760px) {
+      .sidebar {
+        width: min(290px, 85vw);
+        transform: translateX(-105%);
+        visibility: hidden;
+        box-shadow: 20px 0 60px rgba(0,0,0,.45);
+      }
+
+      .sidebar.open { transform: translateX(0); visibility: visible; }
+      .sidebar-close { top: 16px; right: 14px; }
+      .main-content, body.sidebar-collapsed .main-content { margin-left: 0; }
+      body.sidebar-collapsed .sidebar { width: min(290px, 85vw); }
+      body.sidebar-collapsed .brand-name,
+      body.sidebar-collapsed .menu-heading,
+      body.sidebar-collapsed .nav-text,
+      body.sidebar-collapsed .user-name { display: initial; }
+      body.sidebar-collapsed .brand { padding-inline: 9px; }
+      body.sidebar-collapsed .brand-icon { width: 66px; height: 66px; font-size: 34px; }
+      body.sidebar-collapsed .nav-link { justify-content: flex-start; padding-inline: 10px; }
+      body.sidebar-collapsed .user-profile { justify-content: flex-start; padding-inline: 10px; }
+
+      .sidebar-toggle { display: grid; }
+      .topbar { height: 64px; padding: 0 13px; }
+      .topbar-title { font-size: 13px; }
+      .topbar-subtitle { font-size: 10px; }
+      .topbar-status { font-size: 0; gap: 0; }
+      .container { padding: 18px 13px; }
+      .card { padding: 16px; border-radius: 14px; }
+
+      .mobile-overlay {
+        display: block;
+        position: fixed;
+        inset: 0;
+        z-index: 900;
+        background: rgba(1,4,15,.7);
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        border: 0;
+      }
+
+      .mobile-overlay.show {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+      }
+
+      body.menu-open { overflow: hidden; }
+    }
+
+    @media (max-width: 390px) {
+      .topbar-subtitle { display: none; }
+      .topbar { padding-inline: 9px; }
+    }
+  </style>
+</head>
+
+<body>
+  <aside class="sidebar" id="appSidebar" aria-label="Main navigation">
+    <button class="sidebar-close" id="sidebarClose" type="button"
+            aria-label="Collapse sidebar" aria-controls="appSidebar">
+      <svg id="closeIcon" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="2.4"
+           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="m11 17-5-5 5-5"/>
+        <path d="m18 17-5-5 5-5"/>
+      </svg>
+    </button>
+
+    <a href="/dashboard" class="brand">
+      <span class="brand-icon">₹</span>
+      <span class="brand-name">ExpenseTracker <span>PRO</span></span>
+    </a>
+
+    <div class="menu-heading">MAIN MENU</div>
+
+    <nav class="nav-links">
+      <a href="/dashboard" class="nav-link" data-route="/dashboard">
+        <span class="nav-icon ic-dashboard">
+          <svg viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg>
+        </span><span class="nav-text">Dashboard</span>
+      </a>
+
+      <a href="/add-expense" class="nav-link" data-route="/add-expense">
+        <span class="nav-icon ic-add">
+          <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+        </span><span class="nav-text">Add Expense</span>
+      </a>
+
+      <a href="/expenses" class="nav-link" data-route="/expenses">
+        <span class="nav-icon ic-expenses">
+          <svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg>
+        </span><span class="nav-text">All Expenses</span>
+      </a>
+
+      <a href="/budget" class="nav-link" data-route="/budget">
+        <span class="nav-icon ic-budget">
+          <svg viewBox="0 0 24 24"><path d="M12 3v18M17 6.5c0-1.5-2.2-2.5-5-2.5S7 5 7 6.5 9 9 12 9s5 1 5 2.5S14.8 14 12 14s-5 1-5 2.5S9.2 19 12 19s5-1 5-2.5"/></svg>
+        </span><span class="nav-text">Budget</span>
+      </a>
+
+      <a href="/reports" class="nav-link" data-route="/reports">
+        <span class="nav-icon ic-reports">
+          <svg viewBox="0 0 24 24"><path d="M6 20v-7M12 20V6M18 20v-10"/></svg>
+        </span><span class="nav-text">Reports &amp; Insights</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-spacer"></div>
+
+    <div class="sidebar-bottom">
+      <a href="/logout" class="nav-link logout">
+        <span class="nav-icon ic-logout">
+          <svg viewBox="0 0 24 24"><path d="M10 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4"/><path d="M15 8l4 4-4 4M19 12H9"/></svg>
+        </span><span class="nav-text">Logout</span>
+      </a>
+
+      <div class="user-profile">
+        <div class="user-avatar">
+          {{ (session.get('user_name') or 'U')[0]|upper }}
+        </div>
+        <div class="user-name">
+          {{ session.get('user_name', 'User') }}
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <button class="mobile-overlay" id="menuOverlay"
+          type="button" aria-label="Close navigation"></button>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebarToggle" type="button"
+                aria-label="Open navigation" aria-controls="appSidebar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <path d="M4 7h16M4 12h16M4 17h16"/>
+          </svg>
+        </button>
+        <div>
+          <div class="topbar-title">ExpenseTracker Pro</div>
+          <div class="topbar-subtitle">Your money, in control.</div>
+        </div>
+      </div>
+      <div class="topbar-status"><span class="status-dot"></span> Smart Expense Management</div>
+    </header>
+
+    <main class="container">
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+
+  <script>
+    (() => {
+      const sidebar = document.getElementById("appSidebar");
+      const toggle = document.getElementById("sidebarToggle");
+      const closeBtn = document.getElementById("sidebarClose");
+      const overlay = document.getElementById("menuOverlay");
+      const icon = document.getElementById("closeIcon");
+      const mobile = window.matchMedia("(max-width: 760px)");
+
+      const leftArrow = '<path d="m11 17-5-5 5-5"/><path d="m18 17-5-5 5-5"/>';
+      const rightArrow = '<path d="m6 17 5-5-5-5"/><path d="m13 17 5-5-5-5"/>';
+      const xIcon = '<path d="m6 6 12 12M18 6 6 18"/>';
+
+      function renderIcon() {
+        if (mobile.matches) {
+          icon.innerHTML = xIcon;
+          closeBtn.setAttribute("aria-label", "Close navigation");
+        } else {
+          const collapsed = document.body.classList.contains("sidebar-collapsed");
+          icon.innerHTML = collapsed ? rightArrow : leftArrow;
+          closeBtn.setAttribute("aria-label", collapsed ? "Expand sidebar" : "Collapse sidebar");
+        }
+      }
+
+      function closeMobile() {
+        sidebar.classList.remove("open");
+        overlay.classList.remove("show");
+        document.body.classList.remove("menu-open");
+        renderIcon();
+      }
+
+      toggle.addEventListener("click", () => {
+        sidebar.classList.add("open");
+        overlay.classList.add("show");
+        document.body.classList.add("menu-open");
+        renderIcon();
+      });
+
+      closeBtn.addEventListener("click", () => {
+        if (mobile.matches) {
+          closeMobile();
+        } else {
+          document.body.classList.toggle("sidebar-collapsed");
+          renderIcon();
+        }
+      });
+
+      overlay.addEventListener("click", closeMobile);
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape") closeMobile();
+      });
+
+      sidebar.querySelectorAll("a").forEach(link => {
+        link.addEventListener("click", () => {
+          if (mobile.matches) closeMobile();
+        });
+      });
+
+      window.addEventListener("resize", () => {
+        if (!mobile.matches) closeMobile();
+        renderIcon();
+      });
+
+      const path = window.location.pathname.replace(/\/+$/, "") || "/";
+      sidebar.querySelectorAll("[data-route]").forEach(link => {
+        const route = link.dataset.route;
+        const active = path === route ||
+          (route !== "/dashboard" && path.startsWith(route + "/"));
+        link.classList.toggle("active", active);
+        if (active) link.setAttribute("aria-current", "page");
+        else link.removeAttribute("aria-current");
+      });
+
+      renderIcon();
+    })();
+  </script>
+
+  <script src="{{ url_for('static', filename='main.js') }}"></script>
+</body>
+</html>

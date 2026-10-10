@@ -1,0 +1,332 @@
+{% extends "base.html" %} {% block title %}Add Expense - ExpenseTracker Pro{%
+endblock %} {% block content %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Add Expense - ExpenseTracker Pro</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+
+        min-height: 100vh;
+
+        background:
+          radial-gradient(
+            circle at 15% 10%,
+            rgba(139, 92, 246, 0.18),
+            transparent 30%
+          ),
+          radial-gradient(
+            circle at 90% 20%,
+            rgba(6, 182, 212, 0.14),
+            transparent 28%
+          ),
+          #050816;
+
+        color: #f8fafc;
+      }
+
+      .navbar {
+        padding: 18px 50px;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        background: rgba(8, 13, 30, 0.85);
+
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .logo {
+        font-size: 24px;
+        font-weight: 800;
+
+        background: linear-gradient(90deg, #a855f7, #22d3ee);
+
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .nav-link {
+        color: #94a3b8;
+        text-decoration: none;
+        font-size: 14px;
+      }
+
+      .container {
+        max-width: 750px;
+
+        margin: 50px auto;
+
+        padding: 0 20px;
+      }
+
+      .card {
+        background: linear-gradient(
+          145deg,
+          rgba(20, 29, 56, 0.88),
+          rgba(9, 14, 30, 0.88)
+        );
+
+        border: 1px solid rgba(255, 255, 255, 0.08);
+
+        border-radius: 20px;
+
+        padding: 32px;
+
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+      }
+
+      h1 {
+        font-size: 30px;
+
+        margin-bottom: 8px;
+
+        background: linear-gradient(90deg, #ffffff, #c4b5fd, #67e8f9);
+
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .description {
+        color: #94a3b8;
+
+        margin-bottom: 30px;
+
+        font-size: 14px;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      label {
+        display: block;
+
+        margin-bottom: 8px;
+
+        color: #cbd5e1;
+
+        font-size: 14px;
+
+        font-weight: 600;
+      }
+
+      input,
+      select,
+      textarea {
+        width: 100%;
+
+        padding: 13px 14px;
+
+        background: rgba(255, 255, 255, 0.04);
+
+        color: #f8fafc;
+
+        border: 1px solid rgba(255, 255, 255, 0.1);
+
+        border-radius: 9px;
+
+        outline: none;
+
+        font-size: 14px;
+      }
+
+      input:focus,
+      select:focus,
+      textarea:focus {
+        border-color: #8b5cf6;
+
+        box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.12);
+      }
+
+      select option {
+        background: #111827;
+        color: white;
+      }
+
+      textarea {
+        min-height: 100px;
+
+        resize: vertical;
+      }
+
+      .row {
+        display: grid;
+
+        grid-template-columns: 1fr 1fr;
+
+        gap: 18px;
+      }
+
+      .actions {
+        display: flex;
+
+        gap: 12px;
+
+        margin-top: 28px;
+      }
+
+      .btn {
+        flex: 1;
+
+        padding: 13px;
+
+        border-radius: 9px;
+
+        text-align: center;
+
+        text-decoration: none;
+
+        font-size: 14px;
+
+        font-weight: 700;
+
+        cursor: pointer;
+      }
+
+      .primary-btn {
+        border: none;
+
+        color: white;
+
+        background: linear-gradient(135deg, #9333ea, #06b6d4);
+      }
+
+      .secondary-btn {
+        color: #cbd5e1;
+
+        background: rgba(255, 255, 255, 0.05);
+
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      @media (max-width: 600px) {
+        .row {
+          grid-template-columns: 1fr;
+        }
+
+        .card {
+          padding: 24px;
+        }
+
+        .navbar {
+          padding: 16px 20px;
+        }
+
+        .nav-link {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav class="navbar">
+      <!-- <div class="logo">
+            ₹ ExpenseTracker PRO
+        </div> -->
+
+      <a href="/dashboard" class="nav-link"> ← Back to Dashboard </a>
+    </nav>
+
+    <main class="container">
+      <div class="card">
+        <h1>Add New Expense</h1>
+
+        <p class="description">
+          Record your spending and keep your financial records organized.
+        </p>
+
+        <form method="POST"  data-expense-form action="/add-expense">
+          <div class="row">
+            <div class="form-group">
+              <label for="amount"> Amount (₹) </label>
+
+              <input
+                type="number"
+                id="amount"
+                name="amount"
+                placeholder="Enter amount"
+                min="0"
+                step="0.01"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="date"> Date </label>
+
+              <input type="date" id="date" name="date" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="category"> Category </label>
+
+            <select id="category" name="category" required>
+              <option value="">Select a category</option>
+
+              <option value="Food">Food</option>
+
+              <option value="Travel">Travel</option>
+
+              <option value="Shopping">Shopping</option>
+
+              <option value="Bills">Bills</option>
+
+              <option value="Education">Education</option>
+
+              <option value="Entertainment">Entertainment</option>
+
+              <option value="Health">Health</option>
+
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="description"> Description </label>
+
+            <input
+              type="text"
+              id="description"
+              name="description"
+              placeholder="Example: Lunch at college"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="notes"> Notes (Optional) </label>
+
+            <textarea
+              id="notes"
+              name="notes"
+              placeholder="Add any additional details..."
+            ></textarea>
+          </div>
+
+          <div class="actions">
+            <a href="/dashboard" class="btn secondary-btn"> Cancel </a>
+
+            <button type="submit" class="btn primary-btn">Add Expense</button>
+          </div>
+        </form>
+      </div>
+    </main>
+  </body>
+</html>
+
+{% endblock %}

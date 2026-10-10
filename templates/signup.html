@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Create Account - ExpenseTracker Pro</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        min-height: 100vh;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        font-family: Arial, sans-serif;
+
+        background:
+          radial-gradient(
+            circle at 15% 15%,
+            rgba(139, 92, 246, 0.2),
+            transparent 30%
+          ),
+          radial-gradient(
+            circle at 85% 80%,
+            rgba(6, 182, 212, 0.16),
+            transparent 30%
+          ),
+          #050816;
+
+        color: #f8fafc;
+      }
+
+      .signup-card {
+        width: 420px;
+        max-width: 90%;
+
+        padding: 35px;
+
+        background: linear-gradient(
+          145deg,
+          rgba(20, 29, 56, 0.9),
+          rgba(9, 14, 30, 0.9)
+        );
+
+        border: 1px solid rgba(255, 255, 255, 0.08);
+
+        border-radius: 20px;
+
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+      }
+
+      .logo {
+        text-align: center;
+
+        font-size: 25px;
+
+        font-weight: 800;
+
+        margin-bottom: 10px;
+
+        background: linear-gradient(90deg, #a855f7, #22d3ee);
+
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .subtitle {
+        text-align: center;
+
+        color: #94a3b8;
+
+        font-size: 14px;
+
+        margin-bottom: 28px;
+      }
+
+      label {
+        display: block;
+
+        margin-bottom: 7px;
+
+        color: #cbd5e1;
+
+        font-size: 14px;
+      }
+
+      input {
+        width: 100%;
+
+        padding: 12px 14px;
+
+        margin-bottom: 18px;
+
+        background: rgba(255, 255, 255, 0.04);
+
+        color: white;
+
+        border: 1px solid rgba(255, 255, 255, 0.1);
+
+        border-radius: 9px;
+
+        outline: none;
+
+        font-size: 14px;
+      }
+
+      input:focus {
+        border-color: #8b5cf6;
+
+        box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.12);
+      }
+
+      .signup-btn {
+        width: 100%;
+
+        padding: 12px;
+
+        border: none;
+
+        border-radius: 9px;
+
+        background: linear-gradient(135deg, #9333ea, #06b6d4);
+
+        color: white;
+
+        font-size: 15px;
+
+        font-weight: 700;
+
+        cursor: pointer;
+
+        margin-top: 5px;
+      }
+
+      .signin-text {
+        text-align: center;
+
+        color: #94a3b8;
+
+        font-size: 14px;
+
+        margin-top: 22px;
+      }
+
+      .signin-text a {
+        color: #a78bfa;
+
+        text-decoration: none;
+
+        font-weight: 600;
+      }
+
+      .back-home {
+        display: block;
+
+        text-align: center;
+
+        margin-top: 18px;
+
+        color: #64748b;
+
+        text-decoration: none;
+
+        font-size: 13px;
+      }
+
+      .error-message {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.35);
+        color: #fca5a5;
+
+        padding: 10px 12px;
+        border-radius: 8px;
+
+        font-size: 13px;
+        text-align: center;
+
+        margin-bottom: 18px;
+      }
+
+      input[type="password"]::-ms-reveal,
+      input[type="password"]::-ms-clear {
+        display: none;
+      }
+      .password-box {
+        position: relative;
+        width: 100%;
+      }
+
+      .password-box input {
+        padding-right: 45px;
+        width: 100%;
+      }
+
+      .show-password {
+        position: absolute;
+
+        right: 12px;
+        top: 35%;
+
+        transform: translateY(-50%);
+
+        background: transparent;
+        border: none;
+
+        color: #94a3b8;
+
+        cursor: pointer;
+        align-items: center;
+        justify-content: center;
+        display: flex;
+        font-size: 17px;
+        z-index: 10;
+        padding: 4px;
+      }
+
+      .show-password:hover {
+        color: #a78bfa;
+      }
+
+      .field-error {
+        color: #fca5a5;
+
+        font-size: 13px;
+
+        margin-top: -10px;
+        margin-bottom: 15px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="signup-card">
+      <div class="logo">₹ ExpenseTracker PRO</div>
+
+      <p class="subtitle">
+        Create your account and start managing your expenses.
+      </p>
+
+      <form method="POST" action="/signup">
+        <label for="name"> Full Name </label>
+
+        <input
+          type="text"
+          id="name"
+          name="name"
+          placeholder="Enter your full name"
+          required
+        />
+
+        <label for="email"> Email Address </label>
+
+        <input
+          type="email"
+          id="email"
+          name="email"
+          pattern="[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*@gmail\.com"
+          placeholder="Enter your email"
+          required
+        />
+
+        <label for="password"> Password </label>
+
+        <div class="password-box">
+          <input
+            type="password"
+            id="password"
+            name="password"
+            pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#@$!%*?&])[A-Za-z\d#@$!%*?&]{8,}$"
+            placeholder="Create a password"
+            title="Password must be at least 8 characters , contain at least one uppercase letter, one lowercase letter, one number, and one special character."
+            required
+          />
+          <button
+            type="button"
+            class="show-password"
+            onclick="togglePassword('password', this)"
+          >
+            👁
+          </button>
+        </div>
+
+        <label for="confirm-password"> Confirm-Password </label>
+
+        <div class="password-box">
+          <input
+            type="password"
+            id="confirm-password"
+            name="confirm_password"
+            placeholder="Confirm your password"
+            required
+          />
+          <button
+            type="button"
+            class="show-password"
+            onclick="togglePassword('confirm-password', this)"
+          >
+            👁
+          </button>
+        </div>
+
+        <p id="password-error">{% if error %}</p>
+
+        <div class="error-message">{{ error }}</div>
+        {% endif %}
+        <button type="submit" class="signup-btn">Create Account</button>
+      </form>
+
+      <p class="signin-text">
+        Already have an account?
+        <a href="/signin">Sign In</a>
+      </p>
+
+      <a href="/" class="back-home"> ← Back to Home </a>
+    </div>
+
+    <script>
+      function togglePassword(inputId, button) {
+        const input = document.getElementById(inputId);
+
+        if (input.type === "password") {
+          input.type = "text";
+          button.textContent = "👁️";
+        } else {
+          input.type = "password";
+          button.textContent = "👁";
+        }
+      }
+
+      const form = document.querySelector("form");
+
+      form.addEventListener("submit", function (event) {
+        const password = document.getElementById("password").value;
+
+        const confirmPassword =
+          document.getElementById("confirm-password").value;
+
+        const error = document.getElementById("password-error");
+
+        if (password !== confirmPassword) {
+          event.preventDefault();
+
+          error.textContent = "Passwords do not match.";
+
+          return;
+        }
+
+        error.textContent = "";
+      });
+    </script>
+  </body>
+</html>

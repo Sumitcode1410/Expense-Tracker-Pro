@@ -1,0 +1,1439 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>ExpenseTracker Pro — Smart Money Management</title>
+
+    <style>
+      /* =========================
+           GLOBAL
+        ========================= */
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: Inter, Arial, sans-serif;
+        background: #080b18;
+        color: #f8fafc;
+        overflow-x: hidden;
+      }
+
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+
+      .page {
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* =========================
+           BACKGROUND
+        ========================= */
+
+      .glow {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(90px);
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .glow-one {
+        width: 420px;
+        height: 420px;
+        background: rgba(139, 92, 246, 0.22);
+        top: 80px;
+        left: -180px;
+      }
+
+      .glow-two {
+        width: 380px;
+        height: 380px;
+        background: rgba(6, 182, 212, 0.18);
+        top: 500px;
+        right: -160px;
+      }
+
+      .grid-bg {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+        background-size: 60px 60px;
+        mask-image: linear-gradient(to bottom, black, transparent 80%);
+        pointer-events: none;
+      }
+
+      .container {
+        width: min(1180px, 92%);
+        margin: auto;
+        position: relative;
+        z-index: 2;
+      }
+
+      /* =========================
+           NAVBAR
+        ========================= */
+
+      .navbar {
+        position:fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+        height: 70px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+
+        background: rgba(6, 9, 19, 0.76);
+        backdrop-filter: blur(18px);
+
+        padding: 17px 4%;
+      }
+
+      .nav-inner {
+        max-width: 1280px;
+        margin: auto;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 25px;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+
+        font-size: 22px;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+      }
+
+      .logo-icon {
+        width: 38px;
+        height: 38px;
+
+        display: grid;
+        place-items: center;
+
+        border-radius: 11px;
+
+        background: linear-gradient(135deg, #8b5cf6, #06b6d4);
+
+        box-shadow: 0 8px 25px rgba(139, 92, 246, 0.25);
+      }
+
+      .pro {
+        font-size: 10px;
+        padding: 3px 6px;
+        border-radius: 5px;
+
+        color: #67e8f9;
+        background: rgba(6, 182, 212, 0.12);
+        border: 1px solid rgba(6, 182, 212, 0.25);
+
+        letter-spacing: 0.6px;
+      }
+
+      .navbar-logo {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+      }
+
+      .navbar-logo img {
+        width: 180px;
+        height: auto;
+        display: block;
+      }
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 28px;
+
+        color: #94a3b8;
+        font-size: 14px;
+      }
+
+      .nav-links a {
+        transition: 0.25s;
+      }
+
+      .nav-links a:hover {
+        color: white;
+      }
+
+      .nav-button {
+        padding: 10px 17px;
+        border-radius: 9px;
+
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+
+        font-size: 14px;
+        font-weight: 600;
+
+        transition: 0.25s;
+      }
+
+      .nav-button:hover {
+        border-color: #8b5cf6;
+        transform: translateY(-2px);
+      }
+
+      /* =========================
+           HERO
+        ========================= */
+
+      .hero {
+        min-height: 650px;
+
+        display: flex;
+        align-items: center;
+        text-align: center;
+
+        padding: 95px 0 60px;
+      }
+
+      .hero-content {
+        max-width: 900px;
+        margin: auto;
+      }
+
+      .status-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+
+        padding: 8px 14px;
+        margin-bottom: 25px;
+
+        border-radius: 30px;
+
+        color: #c4b5fd;
+        background: rgba(92, 215, 246, 0.09);
+        border: 1px solid rgba(139, 92, 246, 0.25);
+
+        font-size: 13px;
+      }
+
+      .status-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+
+        background: #3493d3;
+        box-shadow: 0 0 12px #34d399;
+      }
+
+      .hero h1 {
+        font-size: clamp(48px, 7vw, 82px);
+        line-height: 1.02;
+        letter-spacing: -3px;
+
+        margin-bottom: 25px;
+      }
+
+      .gradient-text {
+        background: linear-gradient(90deg, #c084fc, #22d3ee, #34d399);
+
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .hero-description {
+        max-width: 680px;
+        margin: auto;
+
+        color: #94a3b8;
+        font-size: 18px;
+        line-height: 1.7;
+      }
+
+      .hero-buttons {
+        margin-top: 34px;
+
+        display: flex;
+        justify-content: center;
+        gap: 14px;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        padding: 14px 23px;
+        border-radius: 10px;
+
+        font-weight: 700;
+        font-size: 14px;
+
+        transition: 0.25s;
+      }
+
+      .primary-btn {
+        background: linear-gradient(135deg, #8b5cf6, #06b6d4);
+
+        box-shadow: 0 12px 35px rgba(139, 92, 246, 0.25);
+      }
+
+      .primary-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 18px 40px rgba(6, 182, 212, 0.22);
+      }
+
+      .secondary-btn {
+        background: rgba(255, 255, 255, 0.035);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+      }
+
+      .secondary-btn:hover {
+        border-color: #8b5cf6;
+        transform: translateY(-3px);
+      }
+
+      .trust-row {
+        margin-top: 24px;
+
+        display: flex;
+        justify-content: center;
+        gap: 24px;
+        flex-wrap: wrap;
+
+        color: #64748b;
+        font-size: 12px;
+      }
+
+      /* =========================
+           DASHBOARD PREVIEW
+        ========================= */
+
+      .preview-section {
+        padding: 35px 0 90px;
+      }
+
+      .dashboard-window {
+        position: relative;
+
+        border-radius: 22px;
+        padding: 18px;
+
+        background: linear-gradient(
+          145deg,
+          rgba(18, 27, 52, 0.95),
+          rgba(8, 13, 28, 0.95)
+        );
+
+        border: 1px solid rgba(255, 255, 255, 0.09);
+
+        box-shadow:
+          0 35px 100px rgba(0, 0, 0, 0.45),
+          0 0 80px rgba(139, 92, 246, 0.08);
+      }
+
+      .window-top {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+
+        padding: 5px 5px 15px;
+      }
+
+      .window-dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: #475569;
+      }
+
+      .window-title {
+        margin-left: 8px;
+        color: #64748b;
+        font-size: 12px;
+      }
+
+      .dashboard {
+        background: #080d1b;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 15px;
+
+        padding: 24px;
+      }
+
+      .dash-heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+
+        margin-bottom: 22px;
+      }
+
+      .dash-heading h2 {
+        font-size: 21px;
+      }
+
+      .dash-heading p {
+        color: #64748b;
+        font-size: 12px;
+        margin-top: 5px;
+      }
+
+      .preview-badge {
+        padding: 7px 11px;
+        border-radius: 8px;
+
+        color: #67e8f9;
+        background: rgba(6, 182, 212, 0.08);
+        border: 1px solid rgba(6, 182, 212, 0.18);
+
+        font-size: 11px;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 13px;
+      }
+
+      .stat-card {
+        padding: 18px;
+
+        border-radius: 13px;
+
+        background: rgba(255, 255, 255, 0.025);
+        border: 1px solid rgba(255, 255, 255, 0.065);
+      }
+
+      .stat-label {
+        color: #64748b;
+        font-size: 11px;
+      }
+
+      .stat-value {
+        font-size: 22px;
+        font-weight: 800;
+        margin-top: 8px;
+      }
+
+      .stat-change {
+        color: #34d399;
+        font-size: 10px;
+        margin-top: 7px;
+      }
+
+      .dashboard-grid {
+        display: grid;
+        grid-template-columns: 1.5fr 1fr;
+        gap: 14px;
+        margin-top: 14px;
+      }
+
+      .panel {
+        padding: 20px;
+
+        border-radius: 13px;
+
+        background: rgba(255, 255, 255, 0.025);
+        border: 1px solid rgba(255, 255, 255, 0.065);
+      }
+
+      .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        margin-bottom: 20px;
+      }
+
+      .panel-header h3 {
+        font-size: 14px;
+      }
+
+      .panel-header span {
+        color: #64748b;
+        font-size: 10px;
+      }
+
+      /* Chart */
+
+      .chart {
+        height: 210px;
+
+        display: flex;
+        align-items: flex-end;
+        gap: 13px;
+
+        padding: 20px 5px 0;
+      }
+
+      .bar {
+        flex: 1;
+        position: relative;
+
+        min-height: 25px;
+
+        border-radius: 6px 6px 2px 2px;
+
+        background: linear-gradient(to top, #7c3aed, #22d3ee);
+
+        opacity: 0.85;
+      }
+
+      .bar::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+
+        background: linear-gradient(
+          to top,
+          transparent,
+          rgba(255, 255, 255, 0.2)
+        );
+
+        border-radius: inherit;
+      }
+
+      .months {
+        display: flex;
+        gap: 13px;
+        padding: 10px 5px 0;
+
+        color: #475569;
+        font-size: 9px;
+      }
+
+      .months span {
+        flex: 1;
+        text-align: center;
+      }
+
+      /* Recent */
+
+      .transaction {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        padding: 12px 0;
+
+        border-bottom: 1px solid rgba(255, 255, 255, 0.055);
+      }
+
+      .transaction:last-child {
+        border-bottom: none;
+      }
+
+      .transaction-left {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+      }
+
+      .transaction-icon {
+        width: 34px;
+        height: 34px;
+
+        display: grid;
+        place-items: center;
+
+        border-radius: 9px;
+
+        background: rgba(139, 92, 246, 0.1);
+      }
+
+      .transaction-name {
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .transaction-date {
+        color: #64748b;
+        font-size: 9px;
+        margin-top: 3px;
+      }
+
+      .transaction-amount {
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      /* =========================
+           SECTION COMMON
+        ========================= */
+
+      .section {
+        padding: 90px 0;
+      }
+
+      .section-heading {
+        max-width: 650px;
+        margin-bottom: 45px;
+      }
+
+      .section-tag {
+        color: #a78bfa;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        margin-bottom: 12px;
+      }
+
+      .section-heading h2 {
+        font-size: clamp(32px, 5vw, 48px);
+        line-height: 1.1;
+        letter-spacing: -1.5px;
+      }
+
+      .section-heading p {
+        color: #64748b;
+        margin-top: 15px;
+        line-height: 1.7;
+      }
+
+      /* =========================
+           FEATURES
+        ========================= */
+
+      .features {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 17px;
+      }
+
+      .feature-card {
+        position: relative;
+
+        padding: 27px;
+
+        min-height: 220px;
+
+        border-radius: 17px;
+
+        background: linear-gradient(
+          145deg,
+          rgba(17, 26, 48, 0.8),
+          rgba(8, 13, 27, 0.8)
+        );
+
+        border: 1px solid rgba(255, 255, 255, 0.07);
+
+        transition: 0.3s;
+      }
+
+      .feature-card:hover {
+        transform: translateY(-6px);
+        border-color: rgba(139, 92, 246, 0.4);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+      }
+
+      .feature-icon {
+        width: 45px;
+        height: 45px;
+
+        display: grid;
+        place-items: center;
+
+        border-radius: 12px;
+
+        background: rgba(139, 92, 246, 0.1);
+        border: 1px solid rgba(139, 92, 246, 0.18);
+
+        font-size: 21px;
+
+        margin-bottom: 20px;
+      }
+
+      .feature-card h3 {
+        font-size: 17px;
+        margin-bottom: 10px;
+      }
+
+      .feature-card p {
+        color: #64748b;
+        font-size: 13px;
+        line-height: 1.7;
+      }
+
+      /* =========================
+           ANALYTICS SECTION
+        ========================= */
+
+      .analytics-box {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+
+        padding: 25px;
+
+        border-radius: 20px;
+
+        background: linear-gradient(
+          145deg,
+          rgba(17, 26, 48, 0.7),
+          rgba(8, 13, 27, 0.7)
+        );
+
+        border: 1px solid rgba(255, 255, 255, 0.07);
+      }
+
+      .analytics-text {
+        padding: 25px 10px;
+      }
+
+      .analytics-text h2 {
+        font-size: 34px;
+        line-height: 1.15;
+        margin-bottom: 15px;
+      }
+
+      .analytics-text p {
+        color: #64748b;
+        line-height: 1.8;
+      }
+
+      .check-list {
+        list-style: none;
+        margin-top: 25px;
+      }
+
+      .check-list li {
+        margin-bottom: 13px;
+        color: #cbd5e1;
+        font-size: 13px;
+      }
+
+      .check-list span {
+        color: #34d399;
+        margin-right: 8px;
+      }
+
+      .category-chart {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        padding: 25px;
+
+        border-radius: 15px;
+        background: rgba(0, 0, 0, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      .category-row {
+        margin-bottom: 20px;
+      }
+
+      .category-info {
+        display: flex;
+        justify-content: space-between;
+
+        margin-bottom: 8px;
+
+        font-size: 12px;
+      }
+
+      .category-info span:first-child {
+        color: #cbd5e1;
+      }
+
+      .category-info span:last-child {
+        color: #94a3b8;
+      }
+
+      .progress {
+        height: 7px;
+
+        border-radius: 20px;
+        background: #111827;
+
+        overflow: hidden;
+      }
+
+      .progress-bar {
+        height: 100%;
+        border-radius: inherit;
+
+        background: linear-gradient(90deg, #8b5cf6, #06b6d4);
+      }
+
+      /* =========================
+           SECURITY
+        ========================= */
+
+      .security-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 17px;
+      }
+
+      .security-card {
+        padding: 25px;
+
+        border-radius: 16px;
+
+        background: rgba(255, 255, 255, 0.025);
+        border: 1px solid rgba(255, 255, 255, 0.07);
+      }
+
+      .security-card h3 {
+        margin-bottom: 10px;
+        font-size: 16px;
+      }
+
+      .security-card p {
+        color: #64748b;
+        line-height: 1.7;
+        font-size: 13px;
+      }
+
+      /* =========================
+           CTA
+        ========================= */
+
+      .cta {
+        position: relative;
+
+        padding: 70px 30px;
+        margin: 30px 0 80px;
+
+        text-align: center;
+
+        border-radius: 25px;
+
+        background:
+          radial-gradient(
+            circle at 50% 0%,
+            rgba(139, 92, 246, 0.25),
+            transparent 55%
+          ),
+          linear-gradient(135deg, #10182f, #0b1224);
+
+        border: 1px solid rgba(139, 92, 246, 0.2);
+
+        overflow: hidden;
+      }
+
+      .cta h2 {
+        font-size: clamp(32px, 5vw, 52px);
+        letter-spacing: -1.5px;
+      }
+
+      .cta p {
+        max-width: 580px;
+        margin: 15px auto 28px;
+
+        color: #94a3b8;
+        line-height: 1.7;
+      }
+
+      /* =========================
+           FOOTER
+        ========================= */
+
+      footer {
+        border-top: 1px solid rgba(255, 255, 255, 0.07);
+        padding: 20px 0;
+
+        color: #475569;
+        font-size: 12px;
+      }
+
+      .footer-inner {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .footer-brand {
+        color: #94a3b8;
+        font-weight: 700;
+      }
+
+      /* =========================
+           RESPONSIVE
+        ========================= */
+
+      @media (max-width: 900px) {
+        .nav-links {
+          display: none;
+        }
+
+        .stats-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+
+        .dashboard-grid,
+        .analytics-box {
+          grid-template-columns: 1fr;
+        }
+
+        .features,
+        .security-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .navbar {
+          padding: 14px 5%;
+        }
+
+        .hero {
+          padding-top: 65px;
+        }
+
+        .hero h1 {
+          letter-spacing: -2px;
+        }
+
+        .stats-grid,
+        .features,
+        .security-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .dashboard {
+          padding: 15px;
+        }
+
+        .dashboard-window {
+          padding: 10px;
+        }
+
+        .chart {
+          gap: 7px;
+        }
+
+        .months {
+          gap: 7px;
+        }
+
+        .footer-inner {
+          flex-direction: column;
+          text-align: center;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="page">
+      <div class="glow glow-one"></div>
+      <div class="glow glow-two"></div>
+      <div class="grid-bg"></div>
+
+      <!-- =========================
+         NAVBAR
+    ========================= -->
+
+      <nav class="navbar">
+        <div class="nav-inner">
+          <a href="/" class="logo">
+            <span class="logo-icon">₹</span>
+            <span>ExpenseTracker</span>
+            <span class="pro">PRO</span>
+          </a>
+          <!---- <a href="/" class="navbar-logo">
+    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="ExpenseTracker Pro">
+</a>-->
+
+          <div class="nav-links">
+            <a href="#features">Features</a>
+            <a href="#analytics">Analytics</a>
+            <a href="#security">Security</a>
+            <a href="#preview">Preview</a>
+          </div>
+
+          <a href="/signin" class="nav-button"> Sign in → </a>
+        </div>
+      </nav>
+
+      <!-- =========================
+         HERO
+    ========================= -->
+
+      <main>
+        <section class="hero">
+          <div class="container">
+            <div class="hero-content">
+              <div class="status-pill">
+                <span class="status-dot"></span>
+                Smart Expense Management
+              </div>
+
+              <h1>
+                Your Money.
+                <br />
+                <span class="gradient-text"> Your Control. </span>
+              </h1>
+
+              <p class="hero-description">
+                Track your expenses, manage your monthly budget, understand your
+                spending patterns and keep your financial goals organized — all
+                from one place.
+              </p>
+
+              <div class="hero-buttons">
+                <a href="/dashboard" class="btn primary-btn">
+                  Launch Dashboard →
+                </a>
+
+                <a href="#preview" class="btn secondary-btn">
+                  Explore Preview
+                </a>
+              </div>
+
+              <div class="trust-row">
+                <span>✓ Simple expense tracking</span>
+                <span>✓ Budget monitoring</span>
+                <span>✓ Spending insights</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- =========================
+             DASHBOARD PREVIEW
+        ========================= -->
+
+        <section class="preview-section" id="preview">
+          <div class="container">
+            <div class="dashboard-window">
+              <div class="window-top">
+                <span class="window-dot"></span>
+                <span class="window-dot"></span>
+                <span class="window-dot"></span>
+
+                <span class="window-title">
+                  ExpenseTracker Pro / Dashboard
+                </span>
+              </div>
+
+              <div class="dashboard">
+                <div class="dash-heading">
+                  <div>
+                    <h2>Financial Overview</h2>
+                    <p>Your spending at a glance</p>
+                  </div>
+
+                  <span class="preview-badge"> LIVE PREVIEW </span>
+                </div>
+
+                <div class="stats-grid">
+                  <div class="stat-card">
+                    <div class="stat-label">Total Spent</div>
+
+                    <div class="stat-value">₹24,850</div>
+
+                    <div class="stat-change">↗ Spending overview</div>
+                  </div>
+
+                  <div class="stat-card">
+                    <div class="stat-label">This Month</div>
+
+                    <div class="stat-value">₹3,420</div>
+
+                    <div class="stat-change">Current month</div>
+                  </div>
+
+                  <div class="stat-card">
+                    <div class="stat-label">Monthly Budget</div>
+
+                    <div class="stat-value">₹5,000</div>
+
+                    <div class="stat-change">Budget limit</div>
+                  </div>
+
+                  <div class="stat-card">
+                    <div class="stat-label">Remaining</div>
+
+                    <div class="stat-value">₹1,580</div>
+
+                    <div class="stat-change">Available</div>
+                  </div>
+                </div>
+
+                <div class="dashboard-grid">
+                  <!-- Chart -->
+
+                  <div class="panel">
+                    <div class="panel-header">
+                      <h3>Monthly Spending</h3>
+                      <span>Last 6 months</span>
+                    </div>
+
+                    <div class="chart">
+                      <div class="bar" style="height: 38%"></div>
+                      <div class="bar" style="height: 55%"></div>
+                      <div class="bar" style="height: 45%"></div>
+                      <div class="bar" style="height: 72%"></div>
+                      <div class="bar" style="height: 58%"></div>
+                      <div class="bar" style="height: 82%"></div>
+                    </div>
+
+                    <div class="months">
+                      <span>Apr</span>
+                      <span>May</span>
+                      <span>Jun</span>
+                      <span>Jul</span>
+                      <span>Aug</span>
+                      <span>Sep</span>
+                    </div>
+                  </div>
+
+                  <!-- Transactions -->
+
+                  <div class="panel">
+                    <div class="panel-header">
+                      <h3>Recent Activity</h3>
+                      <span>Preview</span>
+                    </div>
+
+                    <div class="transaction">
+                      <div class="transaction-left">
+                        <div class="transaction-icon">🍔</div>
+
+                        <div>
+                          <div class="transaction-name">Food</div>
+
+                          <div class="transaction-date">Today</div>
+                        </div>
+                      </div>
+
+                      <div class="transaction-amount">₹500</div>
+                    </div>
+
+                    <div class="transaction">
+                      <div class="transaction-left">
+                        <div class="transaction-icon">🚌</div>
+
+                        <div>
+                          <div class="transaction-name">Travel</div>
+
+                          <div class="transaction-date">Yesterday</div>
+                        </div>
+                      </div>
+
+                      <div class="transaction-amount">₹240</div>
+                    </div>
+
+                    <div class="transaction">
+                      <div class="transaction-left">
+                        <div class="transaction-icon">🛒</div>
+
+                        <div>
+                          <div class="transaction-name">Shopping</div>
+
+                          <div class="transaction-date">Sep 26</div>
+                        </div>
+                      </div>
+
+                      <div class="transaction-amount">₹1,250</div>
+                    </div>
+
+                    <div class="transaction">
+                      <div class="transaction-left">
+                        <div class="transaction-icon">📚</div>
+
+                        <div>
+                          <div class="transaction-name">Education</div>
+
+                          <div class="transaction-date">Sep 24</div>
+                        </div>
+                      </div>
+
+                      <div class="transaction-amount">₹800</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- =========================
+             FEATURES
+        ========================= -->
+
+        <section class="section" id="features">
+          <div class="container">
+            <div class="section-heading">
+              <div class="section-tag">Powerful Tools</div>
+
+              <h2>Everything you need to understand your money.</h2>
+
+              <p>
+                ExpenseTracker Pro brings everyday expense management, budgeting
+                and financial insights together in one clean workspace.
+              </p>
+            </div>
+
+            <div class="features">
+              <div class="feature-card">
+                <div class="feature-icon">📊</div>
+
+                <h3>Smart Analytics</h3>
+
+                <p>
+                  See where your money goes with spending summaries and
+                  category-based insights.
+                </p>
+              </div>
+
+              <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+
+                <h3>Budget Control</h3>
+
+                <p>
+                  Set a monthly spending limit and monitor how much budget
+                  remains.
+                </p>
+              </div>
+
+              <div class="feature-card">
+                <div class="feature-icon">🧾</div>
+
+                <h3>Easy Expense Tracking</h3>
+
+                <p>
+                  Record date, category, description and amount without
+                  complicated forms.
+                </p>
+              </div>
+
+              <div class="feature-card">
+                <div class="feature-icon">📈</div>
+
+                <h3>Spending Reports</h3>
+
+                <p>
+                  Organize your expenses by category to understand your spending
+                  behaviour.
+                </p>
+              </div>
+
+              <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+
+                <h3>Fast Dashboard</h3>
+
+                <p>
+                  Get your important financial information immediately after
+                  opening the dashboard.
+                </p>
+              </div>
+
+              <div class="feature-card">
+                <div class="feature-icon">🔐</div>
+
+                <h3>Private Data</h3>
+
+                <p>
+                  Your project stores expense records inside its own application
+                  database.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- =========================
+             ANALYTICS
+        ========================= -->
+
+        <section class="section" id="analytics">
+          <div class="container">
+            <div class="analytics-box">
+              <div class="analytics-text">
+                <div class="section-tag">Spending Intelligence</div>
+
+                <h2>Turn expense data into useful insights.</h2>
+
+                <p>
+                  Instead of only recording expenses, ExpenseTracker Pro helps
+                  organize your spending into understandable categories.
+                </p>
+
+                <ul class="check-list">
+                  <li>
+                    <span>✓</span>
+                    Category-wise expense tracking
+                  </li>
+
+                  <li>
+                    <span>✓</span>
+                    Monthly spending overview
+                  </li>
+
+                  <li>
+                    <span>✓</span>
+                    Budget remaining calculation
+                  </li>
+
+                  <li>
+                    <span>✓</span>
+                    Recent transaction history
+                  </li>
+                </ul>
+              </div>
+
+              <div class="category-chart">
+                <div class="category-row">
+                  <div class="category-info">
+                    <span>Food</span>
+                    <span>42%</span>
+                  </div>
+
+                  <div class="progress">
+                    <div class="progress-bar" style="width: 42%"></div>
+                  </div>
+                </div>
+
+                <div class="category-row">
+                  <div class="category-info">
+                    <span>Shopping</span>
+                    <span>28%</span>
+                  </div>
+
+                  <div class="progress">
+                    <div class="progress-bar" style="width: 28%"></div>
+                  </div>
+                </div>
+
+                <div class="category-row">
+                  <div class="category-info">
+                    <span>Travel</span>
+                    <span>18%</span>
+                  </div>
+
+                  <div class="progress">
+                    <div class="progress-bar" style="width: 18%"></div>
+                  </div>
+                </div>
+
+                <div class="category-row">
+                  <div class="category-info">
+                    <span>Education</span>
+                    <span>12%</span>
+                  </div>
+
+                  <div class="progress">
+                    <div class="progress-bar" style="width: 12%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- =========================
+             SECURITY
+        ========================= -->
+
+        <section class="section" id="security">
+          <div class="container">
+            <div class="section-heading">
+              <div class="section-tag">Built With Simplicity</div>
+
+              <h2>Your expense data, inside your application.</h2>
+
+              <p>
+                The current project uses a local SQLite database for storing
+                expense records and budget information.
+              </p>
+            </div>
+
+            <div class="security-grid">
+              <div class="security-card">
+                <h3>🗄️ Local Database</h3>
+
+                <p>
+                  Expense records are stored through the application's SQLite
+                  database.
+                </p>
+              </div>
+
+              <div class="security-card">
+                <h3>🔒 Controlled Access</h3>
+
+                <p>
+                  Application routes control how dashboard and expense features
+                  are accessed.
+                </p>
+              </div>
+
+              <div class="security-card">
+                <h3>🧩 Simple Architecture</h3>
+
+                <p>
+                  Flask handles the application logic while HTML templates
+                  provide the user interface.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- =========================
+             FINAL CTA
+        ========================= -->
+
+        <!-- <section class="container">
+
+            <div class="cta">
+
+                <h2>
+                    Ready to take control?
+                </h2>
+
+                <p>
+                    Open your dashboard and start organizing your
+                    expenses, budget and spending information.
+                </p>
+
+                <a href="/dashboard" class="btn primary-btn">
+                    Open ExpenseTracker Pro →
+                </a>
+
+            </div>
+
+        </section> -->
+      </main>
+
+      <!-- =========================
+         FOOTER
+    ========================= -->
+
+      <footer>
+        <div class="container">
+          <div class="footer-inner">
+            <div class="footer-brand">₹ ExpenseTracker Pro</div>
+
+            <div>Smart Expense Management • 2026 • Made by Sumit</div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  <script src="{{ url_for('static', filename='main.js') }}"></script>
+  </body>
+</html>
