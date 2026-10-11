@@ -13,10 +13,15 @@ app.secret_key = "expense_tracker_secret_key"
 # DATABASE CONNECTION
 # =========================================================
 
+import os
+import sqlite3
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_PATH = os.path.join(BASE_DIR, "expenses.db")
+
 def get_db_connection():
-    conn = sqlite3.connect("expenses.db", timeout=30)
+    conn = sqlite3.connect(DB_PATH, timeout=30)
     conn.row_factory = sqlite3.Row
-    conn.execute("PRAGMA foreign_keys = ON")
     return conn
 
 
