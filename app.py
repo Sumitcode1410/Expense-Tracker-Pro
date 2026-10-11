@@ -16,8 +16,7 @@ app.secret_key = "expense_tracker_secret_key"
 import os
 import sqlite3
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DB_PATH = os.path.join(BASE_DIR, "expenses.db")
+DB_PATH = "/tmp/expenses.db"
 
 def get_db_connection():
     conn = sqlite3.connect(DB_PATH, timeout=30)
