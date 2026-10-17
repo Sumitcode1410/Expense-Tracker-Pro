@@ -88,6 +88,86 @@
            NAVBAR
         ========================= */
 
+        
+/* Mobile responsive navbar */
+@media (max-width: 600px) {
+    .navbar {
+        height: 60px;
+        padding: 10px 4%;
+    }
+
+    .nav-inner {
+        gap: 8px;
+    }
+
+    .logo {
+        font-size: 17px;
+        gap: 6px;
+        white-space: nowrap;
+    }
+
+    .logo-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        font-size: 16px;
+    }
+
+    .pro {
+        font-size: 8px;
+        padding: 2px 4px;
+    }
+
+    .nav-button {
+        padding: 7px 10px;
+        font-size: 12px;
+        border-radius: 7px;
+        white-space: nowrap;
+    }
+
+    .hero {
+        padding-top: 85px;
+    }
+
+    .hero h1 {
+        font-size: clamp(34px, 9vw, 46px);
+        letter-spacing: -1px;
+        line-height: 1.1;
+    }
+
+    .hero-description {
+        font-size: 15px;
+        line-height: 1.6;
+    }
+
+    .hero-buttons .btn {
+        padding: 11px 15px;
+        font-size: 12px;
+    }
+}
+
+/* Very small phones */
+@media (max-width: 380px) {
+    .logo {
+        font-size: 14px;
+        gap: 4px;
+    }
+
+    .logo-icon {
+        width: 28px;
+        height: 28px;
+    }
+
+    .nav-button {
+        padding: 6px 8px;
+        font-size: 11px;
+    }
+
+    .pro {
+        font-size: 7px;
+    }
+}
+
       .navbar {
         position:fixed;
         top: 0;
@@ -178,9 +258,15 @@
       }
 
       .nav-button {
+        display: inline-flex;
         padding: 10px 17px;
         border-radius: 9px;
-
+            position: relative;
+            z-index: 1001;
+            pointer-events: auto;
+            cursor: pointer;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
         background: rgba(255, 255, 255, 0.05);
         border: 1px solid rgba(255, 255, 255, 0.1);
 
@@ -190,6 +276,8 @@
         transition: 0.25s;
       }
 
+
+
       .nav-button:hover {
         border-color: #8b5cf6;
         transform: translateY(-2px);
@@ -198,8 +286,9 @@
       /* =========================
            HERO
         ========================= */
-
+@media (max-width: 600px) {
       .hero {
+        padding: 100px 0 45px;
         min-height: 650px;
 
         display: flex;
@@ -210,13 +299,18 @@
       }
 
       .hero-content {
-        max-width: 900px;
+        max-width: 100%;
         margin: auto;
+        width: 100%;
+        padding: 0 12px;
       }
 
       .status-pill {
         display: inline-flex;
         align-items: center;
+        justify-content: center;
+        max-width: 100%;
+        width: fit-content;
         gap: 8px;
 
         padding: 8px 14px;
@@ -232,6 +326,7 @@
       }
 
       .status-dot {
+        flex-shrink: 0;
         width: 7px;
         height: 7px;
         border-radius: 50%;
@@ -239,6 +334,7 @@
         background: #3493d3;
         box-shadow: 0 0 12px #34d399;
       }
+    }
 
       .hero h1 {
         font-size: clamp(48px, 7vw, 82px);
@@ -963,7 +1059,7 @@
             <a href="#preview">Preview</a>
           </div>
 
-          <a href="/signin" class="nav-button"> Sign in → </a>
+          <a href="/signin" class="nav-button" id="signin-btn"> Sign in → </a>
         </div>
       </nav>
 
