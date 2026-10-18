@@ -1,0 +1,173 @@
+[1mdiff --git a/templates/home.html b/templates/home.html[m
+[1mindex 90938f1..79219a4 100644[m
+[1m--- a/templates/home.html[m
+[1m+++ b/templates/home.html[m
+[36m@@ -88,6 +88,86 @@[m
+            NAVBAR[m
+         ========================= */[m
+ [m
+[32m+[m[41m        [m
+[32m+[m[32m/* Mobile responsive navbar */[m
+[32m+[m[32m@media (max-width: 600px) {[m
+[32m+[m[32m    .navbar {[m
+[32m+[m[32m        height: 60px;[m
+[32m+[m[32m        padding: 10px 4%;[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    .nav-inner {[m
+[32m+[m[32m        gap: 8px;[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    .logo {[m
+[32m+[m[32m        font-size: 17px;[m
+[32m+[m[32m        gap: 6px;[m
+[32m+[m[32m        white-space: nowrap;[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    .logo-icon {[m
+[32m+[m[32m        width: 32px;[m
+[32m+[m[32m        height: 32px;[m
+[32m+[m[32m        border-radius: 8px;[m
+[32m+[m[32m        font-size: 16px;[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    .pro {[m
+[32m+[m[32m        font-size: 8px;[m
+[32m+[m[32m        padding: 2px 4px;[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    .nav-button {[m
+[32m+[m[32m        padding: 7px 10px;[m
+[32m+[m[32m        font-size: 12px;[m
+[32m+[m[32m        border-radius: 7px;[m
+[32m+[m[32m        white-space: nowrap;[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    .hero {[m
+[32m+[m[32m        padding-top: 85px;[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    .hero h1 {[m
+[32m+[m[32m        font-size: clamp(34px, 9vw, 46px);[m
+[32m+[m[32m        letter-spacing: -1px;[m
+[32m+[m[32m        line-height: 1.1;[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    .hero-description {[m
+[32m+[m[32m        font-size: 15px;[m
+[32m+[m[32m        line-height: 1.6;[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    .hero-buttons .btn {[m
+[32m+[m[32m        padding: 11px 15px;[m
+[32m+[m[32m        font-size: 12px;[m
+[32m+[m[32m    }[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32m/* Very small phones */[m
+[32m+[m[32m@media (max-width: 380px) {[m
+[32m+[m[32m    .logo {[m
+[32m+[m[32m        font-size: 14px;[m
+[32m+[m[32m        gap: 4px;[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    .logo-icon {[m
+[32m+[m[32m        width: 28px;[m
+[32m+[m[32m        height: 28px;[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    .nav-button {[m
+[32m+[m[32m        padding: 6px 8px;[m
+[32m+[m[32m        font-size: 11px;[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    .pro {[m
+[32m+[m[32m        font-size: 7px;[m
+[32m+[m[32m    }[m
+[32m+[m[32m}[m
+[32m+[m
+       .navbar {[m
+         position:fixed;[m
+         top: 0;[m
+[36m@@ -178,9 +258,15 @@[m
+       }[m
+ [m
+       .nav-button {[m
+[32m+[m[32m        display: inline-flex;[m
+         padding: 10px 17px;[m
+         border-radius: 9px;[m
+[31m-[m
+[32m+[m[32m            position: relative;[m
+[32m+[m[32m            z-index: 1001;[m
+[32m+[m[32m            pointer-events: auto;[m
+[32m+[m[32m            cursor: pointer;[m
+[32m+[m[32m            touch-action: manipulation;[m
+[32m+[m[32m            -webkit-tap-highlight-color: transparent;[m
+         background: rgba(255, 255, 255, 0.05);[m
+         border: 1px solid rgba(255, 255, 255, 0.1);[m
+ [m
+[36m@@ -190,6 +276,8 @@[m
+         transition: 0.25s;[m
+       }[m
+ [m
+[32m+[m
+[32m+[m
+       .nav-button:hover {[m
+         border-color: #8b5cf6;[m
+         transform: translateY(-2px);[m
+[36m@@ -198,8 +286,9 @@[m
+       /* =========================[m
+            HERO[m
+         ========================= */[m
+[31m-[m
+[32m+[m[32m@media (max-width: 600px) {[m
+       .hero {[m
+[32m+[m[32m        padding: 100px 0 45px;[m
+         min-height: 650px;[m
+ [m
+         display: flex;[m
+[36m@@ -210,13 +299,18 @@[m
+       }[m
+ [m
+       .hero-content {[m
+[31m-        max-width: 900px;[m
+[32m+[m[32m        max-width: 100%;[m
+         margin: auto;[m
+[32m+[m[32m        width: 100%;[m
+[32m+[m[32m        padding: 0 12px;[m
+       }[m
+ [m
+       .status-pill {[m
+         display: inline-flex;[m
+         align-items: center;[m
+[32m+[m[32m        justify-content: center;[m
+[32m+[m[32m        max-width: 100%;[m
+[32m+[m[32m        width: fit-content;[m
+         gap: 8px;[m
+ [m
+         padding: 8px 14px;[m
+[36m@@ -232,6 +326,7 @@[m
+       }[m
+ [m
+       .status-dot {[m
+[32m+[m[32m        flex-shrink: 0;[m
+         width: 7px;[m
+         height: 7px;[m
+         border-radius: 50%;[m
+[36m@@ -239,6 +334,7 @@[m
+         background: #3493d3;[m
+         box-shadow: 0 0 12px #34d399;[m
+       }[m
+[32m+[m[32m    }[m
+ [m
+       .hero h1 {[m
+         font-size: clamp(48px, 7vw, 82px);[m
+[36m@@ -963,7 +1059,7 @@[m
+             <a href="#preview">Preview</a>[m
+           </div>[m
+ [m
+[31m-          <a href="/signin" class="nav-button"> Sign in → </a>[m
+[32m+[m[32m          <a href="/signin" class="nav-button" id="signin-btn"> Sign in → </a>[m
+         </div>[m
+       </nav>[m
+ [m

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>ExpenseTracker Pro — Smart Money Management</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
       /* =========================
            GLOBAL
@@ -88,51 +88,41 @@
            NAVBAR
         ========================= */
 
-        
-
-/* =========================
-   NAVBAR
-========================= */
-
-.navbar {
+    .navbar {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    box-sizing: border-box;
-    z-index: 1000;
     height: 70px;
-    padding: 17px 4%;
+    z-index: 1000;
     border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-    background: rgba(6, 9, 19, 0.76);
+    background-color: rgba(6, 9, 19, 0.9);
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
-}
+    padding: 0 4%;
+  }
 
-.nav-inner {
-    width: 100%;
+  .nav-inner {
     max-width: 1280px;
-    margin: auto;
+    height: 100%;
+    margin: 0 auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 25px;
-    min-width: 0;
-    box-sizing: border-box;
-}
+    gap: 20px;
+  }
 
-.logo {
+  .logo {
     display: flex;
     align-items: center;
     gap: 9px;
     font-size: 22px;
     font-weight: 800;
     letter-spacing: -0.5px;
-    min-width: 0;
     white-space: nowrap;
-}
+  }
 
-.logo-icon {
+  .logo-icon {
     width: 38px;
     height: 38px;
     flex-shrink: 0;
@@ -141,10 +131,9 @@
     border-radius: 11px;
     background: linear-gradient(135deg, #8b5cf6, #06b6d4);
     box-shadow: 0 8px 25px rgba(139, 92, 246, 0.25);
-}
+  }
 
-.pro {
-    flex-shrink: 0;
+  .pro {
     font-size: 10px;
     padding: 3px 6px;
     border-radius: 5px;
@@ -152,167 +141,142 @@
     background: rgba(6, 182, 212, 0.12);
     border: 1px solid rgba(6, 182, 212, 0.25);
     letter-spacing: 0.6px;
-}
+  }
 
-.navbar-logo {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    min-width: 0;
-}
-
-.navbar-logo img {
-    width: 180px;
-    max-width: 100%;
-    height: auto;
-    display: block;
-}
-
-.nav-links {
+  .nav-links {
     display: flex;
     align-items: center;
     gap: 28px;
     color: #94a3b8;
     font-size: 14px;
-}
+  }
 
-.nav-links a {
-    transition: 0.25s;
-}
+  .nav-links a { transition: color 0.25s; }
+  .nav-links a:hover { color: #fff; }
 
-.nav-links a:hover {
-    color: white;
-}
-
-.nav-button {
-    display: inline-flex;
-    flex-shrink: 0;
+  .nav-right {
+    display: flex;
     align-items: center;
-    justify-content: center;
-    position: relative;
-    z-index: 1001;
-    visibility: visible;
-    opacity: 1;
-    pointer-events: auto;
-    cursor: pointer;
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
-    padding: 10px 17px;
+    gap: 14px;
+  }
+
+  .nav-button {
+    padding: 10px 20px;
     border-radius: 9px;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
     font-size: 14px;
     font-weight: 600;
-    white-space: nowrap;
-    text-decoration: none;
     transition: 0.25s;
-}
+    white-space: nowrap;
+  }
 
-.nav-button:hover {
+  .nav-button:hover {
     border-color: #8b5cf6;
     transform: translateY(-2px);
-}
+  }
 
-/* =========================
-   MOBILE RESPONSIVE NAVBAR
-========================= */
+  /* Hamburger (hidden on desktop) */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 40px;
+    height: 40px;
+    padding: 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .hamburger span {
+    display: block;
+    width: 100%;
+    height: 3px;
+    background: #94a3b8;
+    border-radius: 2px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+
+  /* Hamburger -> X animation */
+  .hamburger.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+  .hamburger.active span:nth-child(2) { opacity: 0; }
+  .hamburger.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+  /* Dark overlay behind the mobile menu */
+  .nav-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1500;
+  }
+  .nav-overlay.show { display: block; }
+
+  /* ========== RESPONSIVE ========== */
+  @media (max-width: 900px) {
+    .hamburger { display: flex; }
+
+    .nav-links {
+      position: fixed;
+      top: 70px;
+      right: 0;
+      width: 240px;
+      height: calc(100vh - 70px);
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 22px;
+      padding: 28px 24px;
+      font-size: 16px;
+      background: rgba(6, 9, 19, 0.97);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      box-shadow: -2px 0 12px rgba(0, 0, 0, 0.35);
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+      z-index: 2000;
+    }
+
+    .nav-links.show { transform: translateX(0); }
+  }
+
+  html, body { overflow-x: hidden; }
+
+.logo { min-width: 0; }          /* logo ko shrink hone do */
+.nav-right { flex-shrink: 0; }   /* Sign in + hamburger kabhi cut na hon */
 
 @media (max-width: 600px) {
-    .navbar {
-        height: auto;
-        min-height: 60px;
-        padding: 10px 12px;
-    }
+  .navbar { height: 56px; padding: 0 12px; }
+  .nav-inner { gap: 8px; }
 
-    .nav-inner {
-        gap: 8px;
-    }
+  .logo { font-size: 16px; gap: 6px; letter-spacing: -0.3px; }
+  .logo-icon { width: 30px; height: 30px; border-radius: 9px; font-size: 15px; }
+  .pro { font-size: 8px; padding: 2px 4px; }
 
-    .logo {
-        font-size: 17px;
-        gap: 6px;
-        letter-spacing: -0.4px;
-    }
+  .nav-right { gap: 8px; }
+  .nav-button { padding: 7px 10px; font-size: 12px; border-radius: 8px; }
 
-    .logo-icon {
-        width: 32px;
-        height: 32px;
-        border-radius: 8px;
-        font-size: 16px;
-    }
+  .hamburger { width: 30px; height: 30px; padding: 6px; }
 
-    .pro {
-        font-size: 8px;
-        padding: 2px 4px;
-    }
-
-    .nav-button {
-        padding: 7px 10px;
-        font-size: 12px;
-        border-radius: 7px;
-    }
-
-    .hero {
-        padding-top: 85px;
-    }
-
-    .hero h1 {
-        font-size: clamp(34px, 9vw, 46px);
-        letter-spacing: -1px;
-        line-height: 1.1;
-    }
-
-    .hero-description {
-        font-size: 15px;
-        line-height: 1.6;
-    }
-
-    .hero-buttons .btn {
-        padding: 11px 15px;
-        font-size: 12px;
-    }
+  .nav-links { top: 56px; height: calc(100vh - 56px); width: 220px; }
 }
 
-/* =========================
-   VERY SMALL PHONES
-========================= */
-
+/* Bahut chhoti screens (iPhone SE, small Android) */
 @media (max-width: 380px) {
-    .navbar {
-        padding-left: 8px;
-        padding-right: 8px;
-    }
-
-    .nav-inner {
-        gap: 5px;
-    }
-
-    .logo {
-        font-size: 14px;
-        gap: 4px;
-    }
-
-    .logo-icon {
-        width: 28px;
-        height: 28px;
-    }
-
-    .nav-button {
-        padding: 6px 8px;
-        font-size: 11px;
-    }
-
-    .pro {
-        font-size: 7px;
-        padding: 2px 3px;
-    }
+  .pro { display: none; }
+  .logo { font-size: 15px; }
+  .nav-button { padding: 6px 9px; font-size: 11px; }
 }
+
+  /* Avoid content hiding under fixed navbar */
+  main { padding-top: 70px; }
+  @media (max-width: 600px) { main { padding-top: 56px; } }
       /* =========================
            HERO
         ========================= */
-@media (max-width: 600px) {
+
       .hero {
-        padding: 100px 0 45px;
         min-height: 650px;
 
         display: flex;
@@ -323,18 +287,13 @@
       }
 
       .hero-content {
-        max-width: 100%;
+        max-width: 900px;
         margin: auto;
-        width: 100%;
-        padding: 0 12px;
       }
 
       .status-pill {
         display: inline-flex;
         align-items: center;
-        justify-content: center;
-        max-width: 100%;
-        width: fit-content;
         gap: 8px;
 
         padding: 8px 14px;
@@ -350,7 +309,6 @@
       }
 
       .status-dot {
-        flex-shrink: 0;
         width: 7px;
         height: 7px;
         border-radius: 50%;
@@ -358,7 +316,6 @@
         background: #3493d3;
         box-shadow: 0 0 12px #34d399;
       }
-    }
 
       .hero h1 {
         font-size: clamp(48px, 7vw, 82px);
@@ -1065,27 +1022,31 @@
          NAVBAR
     ========================= -->
 
+      
       <nav class="navbar">
-        <div class="nav-inner">
-          <a href="/" class="logo">
-            <span class="logo-icon">₹</span>
-            <span>ExpenseTracker</span>
-            <span class="pro">PRO</span>
-          </a>
-          <!---- <a href="/" class="navbar-logo">
-    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="ExpenseTracker Pro">
-</a>-->
+  <div class="nav-inner">
+    <a href="/" class="logo">
+      <span class="logo-icon">₹</span>
+      <span>ExpenseTracker</span>
+      <span class="pro">PRO</span>
+    </a>
 
-          <div class="nav-links">
-            <a href="#features">Features</a>
-            <a href="#analytics">Analytics</a>
-            <a href="#security">Security</a>
-            <a href="#preview">Preview</a>
-          </div>
+    <div class="nav-links" id="navLinks">
+      <a href="#features">Features</a>
+      <a href="#analytics">Analytics</a>
+      <a href="#security">Security</a>
+      <a href="#preview">Preview</a>
+    </div>
 
-          <a href="/signin" class="nav-button" id="signin-btn"> Sign in → </a>
-        </div>
-      </nav>
+    <div class="nav-right">
+      <a href="/signin" class="nav-button">Sign in →</a>
+      
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
 
       <!-- =========================
          HERO
@@ -1557,3 +1518,29 @@
   <script src="{{ url_for('static', filename='main.js') }}"></script>
   </body>
 </html>
+<script>
+  const hamburger = document.getElementById("hamburger");
+  const navLinks = document.getElementById("navLinks");
+  const overlay = document.getElementById("navOverlay");
+
+  function toggleMenu(open) {
+    const isOpen = open ?? !navLinks.classList.contains("show");
+    navLinks.classList.toggle("show", isOpen);
+    overlay.classList.toggle("show", isOpen);
+    hamburger.classList.toggle("active", isOpen);
+    hamburger.setAttribute("aria-expanded", isOpen);
+  }
+
+  hamburger.addEventListener("click", () => toggleMenu());
+  overlay.addEventListener("click", () => toggleMenu(false));
+
+  // Close menu when a link is clicked
+  navLinks.querySelectorAll("a").forEach(link =>
+    link.addEventListener("click", () => toggleMenu(false))
+  );
+
+  // Reset menu if screen is resized back to desktop
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 900) toggleMenu(false);
+  });
+</script>
